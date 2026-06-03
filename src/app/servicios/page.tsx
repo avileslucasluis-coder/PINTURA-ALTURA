@@ -24,6 +24,7 @@ export default function ServicesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ title: "", description: "", icon: "", order: "0" });
   const { data: session } = useSession();
+  const isAdmin = !!session;
 
   useEffect(() => {
     fetchServices();
