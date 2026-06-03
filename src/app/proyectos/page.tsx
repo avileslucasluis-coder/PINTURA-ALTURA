@@ -207,11 +207,13 @@ export default function ProjectsPage() {
     try {
       const res = await fetch("/api/projects");
       const data = await res.json();
-      setProjects(data);
-      const cats = ["Todos", ...Array.from(new Set(data.map((p: Project) => p.category))) as string[]];
+      const list = Array.isArray(data) ? data : [];
+      setProjects(list);
+      const cats = ["Todos", ...Array.from(new Set(list.map((p: Project) => p.category))) as string[]];
       setCategories(cats);
     } catch (error) {
       console.error("Error fetching projects:", error);
+      setProjects([]);
     } finally {
       setLoading(false);
     }

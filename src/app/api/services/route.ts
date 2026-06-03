@@ -8,7 +8,8 @@ export async function GET() {
     });
     return NextResponse.json(services);
   } catch (error) {
-    return NextResponse.json({ error: "Error fetching services" }, { status: 500 });
+    console.error("[API /api/services GET] Error:", error);
+    return NextResponse.json([]);
   }
 }
 

@@ -20,7 +20,9 @@ export async function GET(req: Request) {
     });
     return NextResponse.json(projects);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 });
+    console.error("[API /api/projects GET] Error:", error);
+    // Always return an empty array on failure so frontend .map() won't crash
+    return NextResponse.json([], { status: 200 });
   }
 }
 
@@ -45,6 +47,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(project);
   } catch (error) {
+    console.error("[API /api/projects POST] Error:", error);
     return NextResponse.json({ error: "Failed to create project" }, { status: 500 });
   }
 }

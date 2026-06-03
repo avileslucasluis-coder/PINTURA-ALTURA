@@ -15,6 +15,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     }
     return NextResponse.json(project);
   } catch (error) {
+    console.error("[API /api/projects/[id] GET] Error:", error);
     return NextResponse.json({ error: "Failed to fetch project" }, { status: 500 });
   }
 }
@@ -42,6 +43,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     });
     return NextResponse.json(project);
   } catch (error) {
+    console.error("[API /api/projects/[id] PUT] Error:", error);
     return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
   }
 }
@@ -58,6 +60,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API /api/projects/[id] DELETE] Error:", error);
     return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
   }
 }

@@ -67,10 +67,13 @@ export default function AdminDashboard() {
       const res = await fetch("/api/projects?all=true");
       if (res.ok) {
         const data = await res.json();
-        setProjects(data);
+        setProjects(Array.isArray(data) ? data : []);
+      } else {
+        setProjects([]);
       }
     } catch {
       showToast("Error al cargar proyectos", "error");
+      setProjects([]);
     } finally {
       setProjectLoading(false);
     }
