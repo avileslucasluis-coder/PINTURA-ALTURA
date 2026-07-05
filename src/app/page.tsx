@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
@@ -12,39 +11,11 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Portfolio } from "@/components/sections/Portfolio";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-type ProjectImage = {
-  id: string;
-  url: string;
-  alt: string | null;
-  order: number;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  category: string;
-  imageUrl: string | null;
-  images: ProjectImage[];
-};
+import { projectsData } from "@/data/projects";
 
 export default function Home() {
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          // Limit to 6 projects for the landing page preview
-          setProjects(data.slice(0, 6));
-        }
-      })
-      .catch((err) => console.error("Error fetching projects for homepage:", err));
-  }, []);
+  // Solo mostramos proyectos visibles y hasta un máximo de 6 en el inicio
+  const visibleProjects = projectsData.filter(p => p.visible).slice(0, 6);
 
   return (
     <>
@@ -78,10 +49,10 @@ export default function Home() {
         </section>
 
         {/* Dynamic Portfolio Section */}
-        <Portfolio projects={projects} />
+        <Portfolio projects={visibleProjects} />
 
         {/* View all projects button container */}
-        {projects.length > 0 && (
+        {visibleProjects.length > 0 && (
           <div className="text-center pb-24 bg-white -mt-12">
             <Link
               href="/proyectos"

@@ -21,8 +21,8 @@ export function Navbar() {
     { name: "Inicio", href: "/" },
     { name: "Servicios", href: "/servicios" },
     { name: "Proyectos", href: "/proyectos" },
-    { name: "Nosotros", href: "/#about" },
-    { name: "Testimonios", href: "/#testimonials" },
+    { name: "Nosotros", href: "/nosotros" },
+    { name: "Testimonios", href: "/testimonios" },
   ];
 
   return (

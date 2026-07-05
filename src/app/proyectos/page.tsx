@@ -6,26 +6,9 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { ArrowLeft, MapPin, Calendar, ChevronLeft, ChevronRight, X, ZoomIn, Eye, Loader2 } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import Image from "next/image";
-
-type ProjectImage = {
-  id: string;
-  url: string;
-  alt: string | null;
-  order: number;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  category: string;
-  imageUrl: string | null;
-  images: ProjectImage[];
-};
+import { projectsData, ProjectData } from "@/data/projects";
 
 function useIntersectionObserver(threshold = 0.1) {
   const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
@@ -54,20 +37,21 @@ function useIntersectionObserver(threshold = 0.1) {
   return { visibleItems, observe };
 }
 
-function ImageCarousel({ images, title }: { images: { url: string; alt?: string | null }[]; title: string }) {
+function ImageCarousel({ images, title }: { images: string[]; title: string }) {
   const [current, setCurrent] = useState(0);
 
-  if (images.length <= 1) {
-    return images[0] ? (
+  if (images.length === 0) return null;
+  if (images.length === 1) {
+    return (
       <Image
-        src={images[0].url}
-        alt={images[0].alt || title}
+        src={images[0]}
+        alt={title}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover portfolio-image"
         loading="lazy"
       />
-    ) : null;
+    );
   }
 
   return (
@@ -82,8 +66,8 @@ function ImageCarousel({ images, title }: { images: { url: string; alt?: string 
           className="absolute inset-0"
         >
           <Image
-            src={images[current].url}
-            alt={images[current].alt || `${title} - ${current + 1}`}
+            src={images[current]}
+            alt={`${title} - ${current + 1}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover portfolio-image"
@@ -107,11 +91,11 @@ function ImageCarousel({ images, title }: { images: { url: string; alt?: string 
       </button>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
         {images.map((_, i) => (
-          <button
+          <div
             key={i}
-            onClick={(e) => { e.stopPropagation(); setCurrent(i); }}
-            className={`carousel-dot ${i === current ? 'active' : ''}`}
-            aria-label={`Imagen ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === current ? "w-4 bg-white" : "w-1.5 bg-white/50"
+            }`}
           />
         ))}
       </div>
@@ -119,272 +103,230 @@ function ImageCarousel({ images, title }: { images: { url: string; alt?: string 
   );
 }
 
-function Lightbox({
-  images,
-  currentIndex,
-  onClose,
-  onPrev,
-  onNext,
-}: {
-  images: { url: string; alt?: string | null }[];
-  currentIndex: number;
-  onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [onClose, onPrev, onNext]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="lightbox-overlay"
-      onClick={onClose}
-    >
-      <button onClick={onClose} className="absolute top-6 right-6 text-white/80 hover:text-white z-10 p-2" aria-label="Cerrar">
-        <X size={32} />
-      </button>
-      {images.length > 1 && (
-        <>
-          <button
-            onClick={(e) => { e.stopPropagation(); onPrev(); }}
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all z-10"
-            aria-label="Anterior"
-          >
-            <ChevronLeft size={28} />
-          </button>
-          <button
-            onClick={(e) => { e.stopPropagation(); onNext(); }}
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all z-10"
-            aria-label="Siguiente"
-          >
-            <ChevronRight size={28} />
-          </button>
-        </>
-      )}
-      <motion.div
-        key={currentIndex}
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="relative w-[90vw] h-[80vh] max-w-5xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Image src={images[currentIndex].url} alt={images[currentIndex].alt || "Proyecto"} fill className="object-contain" sizes="90vw" priority />
-      </motion.div>
-      <div className="absolute bottom-6 text-white/60 text-sm">{currentIndex + 1} / {images.length}</div>
-    </motion.div>
-  );
-}
-
-export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function ProyectosPage() {
   const [filter, setFilter] = useState("Todos");
-  const [categories, setCategories] = useState<string[]>(["Todos"]);
-  const [lightbox, setLightbox] = useState<{ images: { url: string; alt?: string | null }[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const { visibleItems, observe } = useIntersectionObserver(0.1);
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
-    try {
-      const res = await fetch("/api/projects");
-      const data = await res.json();
-      const list = Array.isArray(data) ? data : [];
-      setProjects(list);
-      const cats = ["Todos", ...Array.from(new Set(list.map((p: Project) => p.category))) as string[]];
-      setCategories(cats);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-      setProjects([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Filtramos por visibilidad y luego por categoría
+  const projects = projectsData.filter(p => p.visible);
+  
+  const categories = ["Todos", ...Array.from(new Set(projects.map(p => p.category)))];
 
   const filteredProjects = filter === "Todos"
     ? projects
     : projects.filter(p => p.category === filter);
 
-  const getProjectImages = (project: Project) => {
-    const imgs: { url: string; alt?: string | null }[] = [];
-    if (project.images && project.images.length > 0) {
-      project.images.forEach(img => imgs.push({ url: img.url, alt: img.alt }));
-    } else if (project.imageUrl) {
-      imgs.push({ url: project.imageUrl, alt: project.title });
+  useEffect(() => {
+    if (lightbox !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
-    return imgs;
-  };
+    return () => { document.body.style.overflow = ''; };
+  }, [lightbox]);
 
-  const openLightbox = (project: Project, index = 0) => {
-    const imgs = getProjectImages(project);
-    if (imgs.length > 0) setLightbox({ images: imgs, index });
-  };
+  const handleNextImage = useCallback(() => {
+    if (!lightbox) return;
+    setLightbox({ ...lightbox, index: (lightbox.index + 1) % lightbox.images.length });
+  }, [lightbox]);
+
+  const handlePrevImage = useCallback(() => {
+    if (!lightbox) return;
+    setLightbox({ ...lightbox, index: (lightbox.index - 1 + lightbox.images.length) % lightbox.images.length });
+  }, [lightbox]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightbox) return;
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowRight") handleNextImage();
+      if (e.key === "ArrowLeft") handlePrevImage();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightbox, handleNextImage, handlePrevImage]);
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       <Navbar />
-      <main className="pt-32 pb-20 min-h-screen bg-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="mb-14">
-            <Link href="/" className="inline-flex items-center gap-2 text-primary hover:text-primary-dark mb-6 font-medium transition-colors">
-              <ArrowLeft size={20} />
-              Volver al Inicio
+
+      <main className="flex-grow pt-24 pb-20">
+        <div className="container mx-auto px-6">
+          <div className="mb-10 animate-fade-in">
+            <Link 
+              href="/"
+              className="inline-flex items-center text-primary hover:text-secondary font-medium transition-colors mb-6 group"
+            >
+              <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
+              Volver al inicio
             </Link>
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <h1 className="text-4xl md:text-6xl font-bold text-secondary font-heading mb-4">
-                Proyectos <span className="animate-gradient-text">Destacados</span>
-              </h1>
-              <p className="text-slate-600 text-lg max-w-2xl">
-                Explora nuestro portafolio de trabajos realizados con excelencia y profesionalismo.
-              </p>
-            </motion.div>
+            
+            <h1 className="text-4xl md:text-5xl font-extrabold text-secondary tracking-tight mb-4">
+              Nuestro Portafolio
+            </h1>
+            <div className="w-20 h-1.5 bg-primary rounded-full mb-6"></div>
+            <p className="text-slate-600 text-lg md:text-xl max-w-3xl">
+              Explora nuestra galería de proyectos recientes. Cada trabajo refleja nuestro compromiso con la calidad, el detalle y la satisfacción del cliente.
+            </p>
           </div>
 
-          {/* Filters */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="flex flex-wrap justify-center gap-3 mb-14"
-          >
+          <div className="flex flex-wrap items-center gap-3 mb-10 animate-fade-in" style={{ animationDelay: '0.1s' }}>
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`filter-btn px-6 py-2.5 rounded-full font-medium text-sm transition-all ${
+                className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                   filter === cat
-                    ? "bg-primary text-white shadow-lg shadow-primary/25"
-                    : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-800 border border-slate-200"
+                    ? "bg-primary text-white shadow-md shadow-primary/20 scale-105"
+                    : "bg-white text-slate-600 hover:bg-slate-100 hover:text-secondary border border-slate-200"
                 }`}
               >
                 {cat}
               </button>
             ))}
-          </motion.div>
+          </div>
 
-          {/* Projects Grid */}
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 size={40} className="text-primary animate-spin mb-4" />
-              <p className="text-slate-500 font-medium">Cargando proyectos...</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <AnimatePresence mode="popLayout">
-                {filteredProjects.map((project, index) => {
-                  const projectImages = getProjectImages(project);
-                  const isVisible = visibleItems.has(`proj-${project.id}`);
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.map((project, index) => {
+              const isVisible = visibleItems.has(`project-${project.id}`);
+              
+              return (
+                <div
+                  key={project.id}
+                  id={`project-${project.id}`}
+                  ref={observe}
+                  className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 group flex flex-col h-full transition-all duration-700 ${
+                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+                  }`}
+                  style={{ transitionDelay: `${index % 3 * 100}ms` }}
+                >
+                  <div className="relative h-64 overflow-hidden bg-slate-100">
+                    <ImageCarousel images={project.images} title={project.title} />
+                    
+                    {/* Botón para expandir galería */}
+                    {project.images.length > 0 && (
+                      <button
+                        onClick={() => setLightbox({ images: project.images, index: 0 })}
+                        className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-secondary p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-primary hover:text-white hover:scale-110 shadow-sm z-20"
+                        title="Ver galería ampliada"
+                      >
+                        <ZoomIn size={18} />
+                      </button>
+                    )}
 
-                  return (
-                    <motion.div
-                      key={project.id}
-                      id={`proj-${project.id}`}
-                      ref={observe}
-                      layout
-                      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                      animate={{
-                        opacity: isVisible ? 1 : 0,
-                        y: isVisible ? 0 : 40,
-                        scale: isVisible ? 1 : 0.95
-                      }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.6, delay: index * 0.06, ease: [0.4, 0, 0.2, 1] }}
-                      className="portfolio-card bg-white rounded-2xl overflow-hidden shadow-sm group border border-slate-100 flex flex-col cursor-pointer"
-                      onClick={() => openLightbox(project)}
-                    >
-                      {/* Image */}
-                      <div className="relative h-64 sm:h-72 overflow-hidden bg-slate-100">
-                        {projectImages.length > 0 ? (
-                          <ImageCarousel images={projectImages} title={project.title} />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-400">
-                            <Eye size={32} className="opacity-40" />
-                          </div>
-                        )}
-                        <div className="portfolio-image-overlay flex items-end justify-center pb-6">
-                          <div className="portfolio-overlay-content text-center text-white">
-                            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full inline-block mb-2">
-                              <ZoomIn size={22} />
-                            </div>
-                            <p className="text-sm font-medium">Ver Detalle</p>
-                          </div>
-                        </div>
-                        <div className="portfolio-badge absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-primary shadow-sm z-[3]">
-                          {project.category}
-                        </div>
-                        {projectImages.length > 1 && (
-                          <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-white z-[3]">
-                            {projectImages.length} fotos
-                          </div>
-                        )}
+                    <div className="absolute top-4 left-4 z-20">
+                      <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
+                        {project.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex-grow flex flex-col">
+                    <h3 className="text-xl font-bold text-secondary mb-3 group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    
+                    <p className="text-slate-600 mb-6 flex-grow text-sm leading-relaxed">
+                      {project.description}
+                    </p>
+                    
+                    <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100">
+                      <div className="flex items-center text-sm font-medium text-slate-500">
+                        <MapPin size={16} className="text-primary/70 mr-2 shrink-0" />
+                        <span className="truncate">{project.location}</span>
                       </div>
-
-                      {/* Content */}
-                      <div className="p-6 flex flex-col flex-grow">
-                        <h3 className="text-lg font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
-                          {project.title}
-                        </h3>
-                        <p className="text-slate-600 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">{project.description}</p>
-                        <div className="flex items-center gap-4 text-sm text-slate-500 pt-3 border-t border-slate-100">
-                          <span className="flex items-center gap-1.5">
-                            <MapPin size={14} className="text-primary" />
-                            {project.location}
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Calendar size={14} className="text-primary" />
-                            {project.date}
-                          </span>
-                        </div>
+                      <div className="flex items-center text-sm font-medium text-slate-500">
+                        <Calendar size={16} className="text-primary/70 mr-2 shrink-0" />
+                        <span>{project.date}</span>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          
+          {filteredProjects.length === 0 && (
+            <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 mt-8">
+              <h3 className="text-2xl font-bold text-slate-400 mb-2">No hay proyectos</h3>
+              <p className="text-slate-500">Aún no hemos agregado proyectos en esta categoría.</p>
             </div>
-          )}
-
-          {!loading && filteredProjects.length === 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
-              <Eye size={48} className="mx-auto mb-4 text-slate-300" />
-              <p className="text-slate-500 text-lg">No hay proyectos en esta categoría aún.</p>
-            </motion.div>
           )}
         </div>
       </main>
+
       <Footer />
       <WhatsAppButton />
 
-      {/* Lightbox */}
+      {/* Lightbox para vista ampliada de imágenes */}
       <AnimatePresence>
         {lightbox && (
-          <Lightbox
-            images={lightbox.images}
-            currentIndex={lightbox.index}
-            onClose={() => setLightbox(null)}
-            onPrev={() => setLightbox(prev => prev ? { ...prev, index: (prev.index - 1 + prev.images.length) % prev.images.length } : null)}
-            onNext={() => setLightbox(prev => prev ? { ...prev, index: (prev.index + 1) % prev.images.length } : null)}
-          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-12"
+            onClick={() => setLightbox(null)}
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute top-6 right-6 text-white/70 hover:text-white p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+            >
+              <X size={24} />
+            </button>
+
+            {lightbox.images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+                  className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 md:p-4 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                >
+                  <ChevronLeft size={32} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+                  className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 md:p-4 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                >
+                  <ChevronRight size={32} />
+                </button>
+              </>
+            )}
+
+            <div 
+              className="relative w-full max-w-5xl aspect-[4/3] md:aspect-[16/9] flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={lightbox.index}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={lightbox.images[lightbox.index]}
+                    alt="Proyecto ampliado"
+                    fill
+                    className="object-contain"
+                    sizes="100vw"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Indicador de posición en el lightbox */}
+              {lightbox.images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-1.5 rounded-full text-sm font-medium backdrop-blur-md">
+                  {lightbox.index + 1} / {lightbox.images.length}
+                </div>
+              )}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

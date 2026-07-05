@@ -4,24 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Calendar, ChevronLeft, ChevronRight, X, ZoomIn, Eye } from "lucide-react";
 import Image from "next/image";
-
-type ProjectImage = {
-  id: string;
-  url: string;
-  alt: string | null;
-  order: number;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  category: string;
-  imageUrl: string | null;
-  images: ProjectImage[];
-};
+import { ProjectData } from "@/data/projects";
 
 function useIntersectionObserver(threshold = 0.1) {
   const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
@@ -51,20 +34,21 @@ function useIntersectionObserver(threshold = 0.1) {
   return { visibleItems, observe };
 }
 
-function ImageCarousel({ images, title }: { images: { url: string; alt?: string | null }[]; title: string }) {
+function ImageCarousel({ images, title }: { images: string[]; title: string }) {
   const [current, setCurrent] = useState(0);
 
-  if (images.length <= 1) {
-    return images[0] ? (
+  if (images.length === 0) return null;
+  if (images.length === 1) {
+    return (
       <Image
-        src={images[0].url}
-        alt={images[0].alt || title}
+        src={images[0]}
+        alt={title}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover portfolio-image"
         loading="lazy"
       />
-    ) : null;
+    );
   }
 
   return (
@@ -79,8 +63,8 @@ function ImageCarousel({ images, title }: { images: { url: string; alt?: string 
           className="absolute inset-0"
         >
           <Image
-            src={images[current].url}
-            alt={images[current].alt || `${title} - ${current + 1}`}
+            src={images[current]}
+            alt={`${title} - ${current + 1}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover portfolio-image"
@@ -89,7 +73,6 @@ function ImageCarousel({ images, title }: { images: { url: string; alt?: string 
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation arrows */}
       <button
         onClick={(e) => { e.stopPropagation(); setCurrent((p) => (p - 1 + images.length) % images.length); }}
         className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
@@ -105,7 +88,6 @@ function ImageCarousel({ images, title }: { images: { url: string; alt?: string 
         <ChevronRight size={18} />
       </button>
 
-      {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
         {images.map((_, i) => (
           <button
@@ -127,7 +109,7 @@ function Lightbox({
   onPrev,
   onNext,
 }: {
-  images: { url: string; alt?: string | null }[];
+  images: string[];
   currentIndex: number;
   onClose: () => void;
   onPrev: () => void;
@@ -152,7 +134,7 @@ function Lightbox({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="lightbox-overlay"
+      className="lightbox-overlay z-[100]"
       onClick={onClose}
     >
       <button
@@ -192,8 +174,8 @@ function Lightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <Image
-          src={images[currentIndex].url}
-          alt={images[currentIndex].alt || "Proyecto"}
+          src={images[currentIndex]}
+          alt={"Proyecto"}
           fill
           className="object-contain"
           sizes="90vw"
@@ -208,9 +190,9 @@ function Lightbox({
   );
 }
 
-export function Portfolio({ projects }: { projects: Project[] }) {
+export function Portfolio({ projects }: { projects: ProjectData[] }) {
   const [filter, setFilter] = useState("Todos");
-  const [lightbox, setLightbox] = useState<{ images: { url: string; alt?: string | null }[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const { visibleItems, observe } = useIntersectionObserver(0.1);
 
   const categories = ["Todos", ...Array.from(new Set(projects.map(p => p.category)))];
@@ -219,20 +201,9 @@ export function Portfolio({ projects }: { projects: Project[] }) {
     ? projects
     : projects.filter(p => p.category === filter);
 
-  const getProjectImages = (project: Project) => {
-    const imgs: { url: string; alt?: string | null }[] = [];
-    if (project.images && project.images.length > 0) {
-      project.images.forEach(img => imgs.push({ url: img.url, alt: img.alt }));
-    } else if (project.imageUrl) {
-      imgs.push({ url: project.imageUrl, alt: project.title });
-    }
-    return imgs;
-  };
-
-  const openLightbox = (project: Project, index = 0) => {
-    const imgs = getProjectImages(project);
-    if (imgs.length > 0) {
-      setLightbox({ images: imgs, index });
+  const openLightbox = (project: ProjectData, index = 0) => {
+    if (project.images.length > 0) {
+      setLightbox({ images: project.images, index });
     }
   };
 
@@ -283,7 +254,6 @@ export function Portfolio({ projects }: { projects: Project[] }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => {
-              const projectImages = getProjectImages(project);
               const isVisible = visibleItems.has(`project-${project.id}`);
 
               return (
@@ -307,10 +277,9 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                   className="portfolio-card bg-white rounded-2xl overflow-hidden shadow-md group border border-slate-100/80 flex flex-col cursor-pointer"
                   onClick={() => openLightbox(project)}
                 >
-                  {/* Image area */}
                   <div className="relative h-72 overflow-hidden bg-slate-100">
-                    {projectImages.length > 0 ? (
-                      <ImageCarousel images={projectImages} title={project.title} />
+                    {project.images.length > 0 ? (
+                      <ImageCarousel images={project.images} title={project.title} />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-400">
                         <div className="text-center">
@@ -320,7 +289,6 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                       </div>
                     )}
 
-                    {/* Hover overlay */}
                     <div className="portfolio-image-overlay flex items-end justify-center pb-6">
                       <div className="portfolio-overlay-content text-center text-white">
                         <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full inline-block mb-3">
@@ -330,20 +298,17 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                       </div>
                     </div>
 
-                    {/* Category badge */}
                     <div className="portfolio-badge absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-xs font-bold text-primary shadow-sm z-[3]">
                       {project.category}
                     </div>
 
-                    {/* Image count badge */}
-                    {projectImages.length > 1 && (
+                    {project.images.length > 1 && (
                       <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-white z-[3]">
-                        {projectImages.length} fotos
+                        {project.images.length} fotos
                       </div>
                     )}
                   </div>
 
-                  {/* Content */}
                   <div className="p-6 flex flex-col flex-grow">
                     <h4 className="text-lg font-bold text-secondary mb-2 group-hover:text-primary transition-colors duration-300">
                       {project.title}
@@ -382,7 +347,6 @@ export function Portfolio({ projects }: { projects: Project[] }) {
         )}
       </div>
 
-      {/* Lightbox */}
       <AnimatePresence>
         {lightbox && (
           <Lightbox
