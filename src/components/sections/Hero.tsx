@@ -13,6 +13,7 @@ export function Hero() {
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071&auto=format&fit=crop')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[#0F4C5C]/85 via-[#1F2937]/70 to-[#0A3948]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#020607]/90" />
       </div>
 
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mt-16">
@@ -26,8 +27,8 @@ export function Hero() {
             <span className="text-sm font-medium">Seguridad y Calidad Garantizada en Guayaquil</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight font-heading">
-            Expertos en <span className="text-accent">Pintura en Altura</span> y Fachadas
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight font-heading [text-shadow:_0_2px_12px_rgba(0,0,0,0.65)]">
+            Expertos en <span className="text-accent [text-shadow:_0_2px_12px_rgba(0,0,0,0.65)]">Pintura en Altura</span> y Fachadas
           </h1>
           
           <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto font-light">
