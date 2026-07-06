@@ -1,21 +1,28 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+
+type PageView = {
+  id: string;
+  path: string;
+  createdAt: string;
+};
+
+const pageViews: PageView[] = [];
 
 // Public endpoint to record a page view
 export async function POST(req: Request) {
   try {
     const { path } = await req.json();
-    
-    // Simple verification to prevent spam of empty paths
-    const targetPath = path && typeof path === "string" ? path : "/";
 
-    const view = await prisma.pageView.create({
-      data: {
-        path: targetPath
-      }
-    });
+    const targetPath = path && typeof path === "string" ? path : "/";
+    const view: PageView = {
+      id: `view-${Date.now()}`,
+      path: targetPath,
+      createdAt: new Date().toISOString()
+    };
+
+    pageViews.push(view);
 
     return NextResponse.json({ success: true, id: view.id });
   } catch (error) {
@@ -32,35 +39,15 @@ export async function GET() {
   }
 
   try {
-    // Total views
-    const totalViews = await prisma.pageView.count();
+    const totalViews = pageViews.length;
+    const viewsByPath = Object.entries(
+      pageViews.reduce<Record<string, number>>((acc, view) => {
+        acc[view.path] = (acc[view.path] || 0) + 1;
+        return acc;
+      }, {})
+    ).map(([path, count]) => ({ path, count }));
 
-    // Group by path
-    const viewsByPath = await prisma.pageView.groupBy({
-      by: ["path"],
-      _count: {
-        id: true
-      }
-    });
-
-    // Group by date (last 7 days)
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    const recentViews = await prisma.pageView.findMany({
-      where: {
-        createdAt: {
-          gte: sevenDaysAgo
-        }
-      },
-      select: {
-        createdAt: true
-      }
-    });
-
-    // Count views per day
     const viewsByDay: Record<string, number> = {};
-    // Initialize last 7 days with 0
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
@@ -68,24 +55,21 @@ export async function GET() {
       viewsByDay[dateString] = 0;
     }
 
-    recentViews.forEach((v) => {
-      const dateString = v.createdAt.toISOString().split("T")[0];
+    pageViews.forEach((view) => {
+      const dateString = view.createdAt.split("T")[0];
       if (viewsByDay[dateString] !== undefined) {
-        viewsByDay[dateString]++;
+        viewsByDay[dateString] += 1;
       }
     });
 
-    const dailyStats = Object.keys(viewsByDay).map(date => ({
+    const dailyStats = Object.entries(viewsByDay).map(([date, count]) => ({
       date,
-      count: viewsByDay[date]
+      count
     }));
 
     return NextResponse.json({
       totalViews,
-      viewsByPath: viewsByPath.map(item => ({
-        path: item.path,
-        count: item._count.id
-      })),
+      viewsByPath,
       dailyStats
     });
   } catch (error) {

@@ -70,15 +70,24 @@ npm install
 
 > ⏱️ Este proceso puede tardar entre 1 y 3 minutos. Espera a que termine completamente.
 
-### Paso 3: Preparar la base de datos
+### Paso 3: Configurar variables de entorno
 
-Este comando crea la base de datos local donde se guardan los proyectos, imágenes y visitas:
+Copia el archivo de ejemplo y ajusta las credenciales del administrador:
 
 ```bash
-npx prisma db push
+copy .env.example .env
 ```
 
-> 📌 Solo necesitas ejecutar este comando la primera vez, o si cambias el esquema de base de datos.
+Edita el archivo `.env` y define tus valores:
+
+```env
+ADMIN_USER="admin"
+ADMIN_PASSWORD="tu_contraseña_segura"
+NEXTAUTH_SECRET="una-clave-larga-y-aleatoria"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+> 📌 No se necesita base de datos: los proyectos y servicios se gestionan desde el código y el login del panel se valida con estas variables.
 
 ### Paso 4: Iniciar el servidor de desarrollo
 
@@ -117,7 +126,7 @@ En la terminal donde está corriendo, presiona `Ctrl + C`.
 | `EACCES permission denied` | Ejecuta la terminal como Administrador |
 | `Port 3000 is already in use` | Cierra la otra aplicación que usa el puerto, o ejecuta: `npx next dev -p 3001` |
 | `Cannot find module` | Ejecuta `npm install` nuevamente |
-| `Prisma error` o `Database error` | Ejecuta `npx prisma db push` y luego `npx prisma generate` |
+| `Unauthorized` o error de login | Verifica que `ADMIN_USER`, `ADMIN_PASSWORD` y `NEXTAUTH_SECRET` estén bien definidos en `.env` |
 
 ---
 
@@ -349,19 +358,13 @@ Cuando estés listo para que tu página sea accesible en internet, tienes varias
    - Entra a Vercel y haz clic en **"Add New Project"**.
    - Selecciona tu repositorio de GitHub.
    - Configura las **variables de entorno** (las que están en `.env`):
-     - `DATABASE_URL` → Usa una base de datos en la nube (ver nota abajo).
      - `ADMIN_USER` → Tu usuario administrador.
      - `ADMIN_PASSWORD` → Tu contraseña administrador.
      - `NEXTAUTH_SECRET` → Una clave larga y aleatoria.
      - `NEXTAUTH_URL` → `https://tu-dominio.vercel.app`
    - Haz clic en **"Deploy"**.
 
-> ⚠️ **Nota sobre la base de datos:** Vercel no soporta SQLite en producción. Deberás migrar a una base de datos en la nube como:
-> - **[Turso](https://turso.tech)** — Gratuito, compatible con SQLite.
-> - **[PlanetScale](https://planetscale.com)** — MySQL compatible con Prisma.
-> - **[Supabase](https://supabase.com)** — PostgreSQL gratuito.
->
-> Para migrar, solo cambia el `provider` en `prisma/schema.prisma` y actualiza `DATABASE_URL` en las variables de entorno de Vercel.
+> ✅ **Nota importante:** Esta versión ya no depende de una base de datos externa. El contenido del sitio se gestiona desde el código y el acceso de administración se controla por variables de entorno.
 
 ### Opción 2: Publicar en un VPS (Servidor Privado Virtual)
 
@@ -387,7 +390,6 @@ Si prefieres tener control total del servidor, puedes usar un VPS de DigitalOcea
 5. **Instalar dependencias y compilar:**
    ```bash
    npm install
-   npx prisma db push
    npm run build
    ```
 6. **Iniciar con PM2** (gestor de procesos que mantiene la app viva):
@@ -486,11 +488,7 @@ Prueba estos pasos en orden:
    rm -rf node_modules
    npm install
    ```
-3. Regenera la base de datos:
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
+3. Verifica tus variables de entorno en `.env`.
 4. Reinicia el servidor:
    ```bash
    npm run dev
@@ -506,19 +504,9 @@ Abre el archivo `.env` y cambia la variable `ADMIN_PASSWORD` por una nueva contr
 - Si usas imágenes de internet (URLs externas), agrega el dominio en `next.config.ts` dentro de `images.remotePatterns`.
 - Asegúrate de que las imágenes sean de formato compatible: `.jpg`, `.png`, `.webp`.
 
-### 🔹 ¿Cómo hago una copia de seguridad de la base de datos?
+### 🔹 ¿Cómo hago una copia de seguridad del contenido del sitio?
 
-La base de datos local es un archivo único. Para respaldarlo:
-
-```bash
-copy prisma\dev.db prisma\backup_dev.db
-```
-
-Para restaurar una copia:
-
-```bash
-copy prisma\backup_dev.db prisma\dev.db
-```
+Como esta versión no usa base de datos, la copia de seguridad se realiza guardando el repositorio y los archivos estáticos o de contenido que modifiques en el código.
 
 ### 🔹 ¿Puedo usar esta aplicación en mi teléfono o tablet?
 
@@ -540,13 +528,9 @@ No hay un límite predefinido. Puedes subir tantas imágenes como desees por cad
 
 **No.** El sistema de analíticas excluye automáticamente las visitas a las rutas `/admin` y `/api`. Solo se registran las visitas de las páginas públicas del sitio.
 
-### 🔹 ¿Cómo reinicio la base de datos desde cero?
+### 🔹 ¿Cómo reinicio el estado del sitio?
 
-⚠️ **Cuidado:** Esto eliminará todos los proyectos, imágenes y estadísticas.
-
-```bash
-npx prisma db push --force-reset
-```
+Si deseas volver a un estado inicial, puedes restaurar el contenido desde el código o volver a clonar el repositorio. No existe una base de datos que reiniciar.
 
 ---
 
@@ -558,7 +542,6 @@ npx prisma db push --force-reset
 | **React 19** | Librería de interfaz de usuario |
 | **TypeScript** | Tipado estático para código más seguro |
 | **Tailwind CSS 4** | Estilos utilitarios modernos |
-| **Prisma ORM** | Gestión de base de datos (SQLite en desarrollo) |
 | **NextAuth.js** | Autenticación segura para el panel de administración |
 | **Framer Motion** | Animaciones fluidas y profesionales |
 | **Lucide Icons** | Iconos modernos y ligeros |
@@ -574,7 +557,7 @@ npx prisma db push --force-reset
 | **Usuario** | `admin` |
 | **Contraseña** | `123456` |
 | **Archivo de credenciales** | `.env` |
-| **Base de datos** | `prisma/dev.db` |
+| **Base de datos** | No aplica |
 | **Carpeta de imágenes subidas** | `public/uploads/` |
 
 ---

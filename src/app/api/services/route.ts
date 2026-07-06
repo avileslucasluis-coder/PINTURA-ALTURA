@@ -1,16 +1,8 @@
-import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { createService, getServices } from "@/lib/service-store";
 
 export async function GET() {
-  try {
-    const services = await prisma.service.findMany({
-      orderBy: { order: 'asc' }
-    });
-    return NextResponse.json(services);
-  } catch (error) {
-    console.error("[API /api/services GET] Error:", error);
-    return NextResponse.json([]);
-  }
+  return NextResponse.json(getServices());
 }
 
 export async function POST(req: NextRequest) {
@@ -18,13 +10,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { title, description, icon, order } = body;
 
-    const service = await prisma.service.create({
-      data: {
-        title,
-        description,
-        icon,
-        order: order || 0
-      }
+    const service = createService({
+      title,
+      description,
+      icon: typeof icon === "string" ? icon : null,
+      order: typeof order === "number" ? order : 0
     });
 
     return NextResponse.json(service, { status: 201 });

@@ -1,21 +1,30 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+const adminUser = process.env.ADMIN_USER;
+const adminPassword = process.env.ADMIN_PASSWORD;
+const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Usuario", type: "text", placeholder: "admin" },
+        username: { label: "Usuario", type: "text" },
         password: { label: "Contraseña", type: "password" }
       },
       async authorize(credentials) {
-        if (
-          credentials?.username === (process.env.ADMIN_USER || "admin") &&
-          credentials?.password === (process.env.ADMIN_PASSWORD || "123456")
-        ) {
-          return { id: "1", name: "Administrador" };
+        if (!adminUser || !adminPassword) {
+          return null;
         }
+
+        if (
+          credentials?.username === adminUser &&
+          credentials?.password === adminPassword
+        ) {
+          return { id: "admin", name: "Administrador" };
+        }
+
         return null;
       }
     })
@@ -26,5 +35,5 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET || "supersecret",
+  secret: nextAuthSecret,
 };
