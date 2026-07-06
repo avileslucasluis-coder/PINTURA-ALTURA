@@ -37,7 +37,7 @@ export function Navbar() {
             <div className={`p-2 rounded-lg ${isScrolled ? "bg-primary text-white" : "bg-white/90 text-primary shadow-sm"}`}>
               <PaintRoller size={24} />
             </div>
-            <span className={`text-2xl font-bold tracking-tight font-heading ${isScrolled ? "text-secondary" : "text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"}`}>
+            <span className={`text-2xl font-bold tracking-tight font-heading ${isScrolled ? "text-secondary" : "text-slate-900"}`}>
               TUPINTOR LUIS
             </span>
           </Link>
@@ -49,7 +49,7 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 className={`font-medium hover:text-accent transition-colors ${
-                  isScrolled ? "text-slate-700" : "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
+                  isScrolled ? "text-slate-700" : "text-slate-900"
                 }`}
               >
                 {link.name}
@@ -67,7 +67,7 @@ export function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-md ${isScrolled ? "text-secondary" : "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"}`}
+              className={`p-2 rounded-md ${isScrolled ? "text-secondary" : "text-slate-900"}`}
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
