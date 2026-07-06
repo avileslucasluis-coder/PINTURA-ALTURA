@@ -48,7 +48,7 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`font-medium hover:text-primary transition-colors ${
+                className={`font-medium hover:text-accent transition-colors ${
                   isScrolled ? "text-slate-600" : "text-white/90"
                 }`}
               >
@@ -57,7 +57,7 @@ export function Navbar() {
             ))}
             <Link
               href="/#contact"
-              className="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-full font-semibold transition-all transform hover:scale-105 shadow-md"
+              className="bg-primary hover:bg-accent text-white px-6 py-2.5 rounded-full font-semibold transition-all transform hover:scale-105 shadow-md"
             >
               Contactar
             </Link>
@@ -90,7 +90,7 @@ export function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-3 py-3 text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-md"
+                  className="block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent hover:bg-slate-50 rounded-md"
                 >
                   {link.name}
                 </Link>
@@ -98,7 +98,7 @@ export function Navbar() {
               <Link
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center mt-4 bg-primary text-white px-6 py-3 rounded-md font-semibold"
+                className="block w-full text-center mt-4 bg-primary hover:bg-accent text-white px-6 py-3 rounded-md font-semibold transition-colors"
               >
                 Contactar Ahora
               </Link>

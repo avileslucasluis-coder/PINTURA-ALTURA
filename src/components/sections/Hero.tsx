@@ -12,7 +12,7 @@ export function Hero() {
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071&auto=format&fit=crop')" }}
       >
-        <div className="absolute inset-0 bg-secondary/80 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0F4C5C]/85 via-[#1F2937]/70 to-[#0A3948]/90" />
       </div>
 
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mt-16">
@@ -22,12 +22,12 @@ export function Hero() {
           transition={{ duration: 0.8 }}
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white/90 border border-white/20 mb-8">
-            <ShieldCheck size={18} className="text-primary" />
+            <ShieldCheck size={18} className="text-accent" />
             <span className="text-sm font-medium">Seguridad y Calidad Garantizada en Guayaquil</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight font-heading">
-            Expertos en <span className="text-primary">Pintura en Altura</span> y Fachadas
+            Expertos en <span className="text-accent">Pintura en Altura</span> y Fachadas
           </h1>
           
           <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto font-light">
@@ -37,7 +37,7 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               href="#contact"
-              className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-dark text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 bg-accent hover:bg-[#b23f33] text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-lg shadow-accent/20 flex items-center justify-center gap-2"
             >
               Solicitar Cotización por WhatsApp
             </Link>
