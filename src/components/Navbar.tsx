@@ -34,10 +34,10 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <div className="bg-primary p-2 rounded-lg text-white">
+            <div className={`p-2 rounded-lg ${isScrolled ? "bg-primary text-white" : "bg-white/90 text-primary shadow-sm"}`}>
               <PaintRoller size={24} />
             </div>
-            <span className={`text-2xl font-bold tracking-tight font-heading ${isScrolled ? "text-secondary" : "text-white"}`}>
+            <span className={`text-2xl font-bold tracking-tight font-heading ${isScrolled ? "text-secondary" : "text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"}`}>
               TUPINTOR LUIS
             </span>
           </Link>
@@ -49,7 +49,7 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 className={`font-medium hover:text-accent transition-colors ${
-                  isScrolled ? "text-slate-600" : "text-white/90"
+                  isScrolled ? "text-slate-700" : "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
                 }`}
               >
                 {link.name}
@@ -67,7 +67,7 @@ export function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-md ${isScrolled ? "text-secondary" : "text-white"}`}
+              className={`p-2 rounded-md ${isScrolled ? "text-secondary" : "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"}`}
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
