@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Menu, X, PaintRoller } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +9,8 @@ import { motion, AnimatePresence } from "framer-motion";
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +40,9 @@ export function Navbar() {
             <div className={`p-2 rounded-lg ${isScrolled ? "bg-primary text-white" : "bg-white/90 text-primary shadow-sm"}`}>
               <PaintRoller size={24} />
             </div>
-            <span className={`text-2xl font-bold tracking-tight font-heading ${isScrolled ? "text-secondary" : "text-slate-900"}`}>
+            <span className={`text-2xl font-bold tracking-tight font-heading ${
+              isScrolled ? "text-secondary" : isHomePage ? "text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" : "text-slate-700"
+            }`}>
               TUPINTOR LUIS
             </span>
           </Link>
@@ -49,7 +54,7 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 className={`font-medium hover:text-accent transition-colors ${
-                  isScrolled ? "text-slate-700" : "text-slate-900"
+                  isScrolled ? "text-slate-700" : isHomePage ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" : "text-slate-700"
                 }`}
               >
                 {link.name}
@@ -67,7 +72,7 @@ export function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-md ${isScrolled ? "text-secondary" : "text-slate-900"}`}
+              className={`p-2 rounded-md ${isScrolled ? "text-secondary" : isHomePage ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" : "text-slate-700"}`}
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
