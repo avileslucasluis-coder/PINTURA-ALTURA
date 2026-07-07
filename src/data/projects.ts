@@ -103,7 +103,7 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [
-      "/salinas1.jpg",
+      "/uploads/salinas1.jpg",
       "/uploads/ejemplo3-b.jpg",
       "/uploads/ejemplo3-c.jpg"
     ]
