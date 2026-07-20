@@ -164,22 +164,8 @@ export const projectsData: ProjectData[] = [
       "/uploads/Cafeteria 3.png"
     ]
   },
-  {
-    id: "11",
-    title: "Pintura la cafeteria de Colgate Palmolive ",
-    location: "Km 16.5, Vía a Daule, Daule",
-    date: "01 de julio, 2024",
-    description: "Se realizó el mantenimiento de pintura en cafeteria de la fábrica Colgate Palmolive. El trabajo consistió en la limpieza del edificio mediante hidrolavado, seguida de una mano de sellador. Posteriormente, se repararon las fisuras existentes y se aplicó corrector de enlucido para nivelar la superficie. Finalmente, se realizaron dos manos de pintura exterior. Este proceso se llevó a cabo con el objetivo de prevenir la humedad y proteger el recubrimiento, evitando que la pintura se deteriore con facilidad.",
-    category: "Pintura de Edificios",
-    visible: true,
-    images: [ 
-      "/uploads/Cafeteria 1.png",
-      "/uploads/Cafeteria 2.png",
-      "/uploads/Cafeteria 3.png"
-    ]
-  },
    {
-    id: "12",
+    id: "11",
     title: "Pintura en los condominios de las acacias ",
     location: "sur de Guayaquil, frente al parque del sector TikTok y cerca de la Av. 25 de Julio y el Mall del Sur",
     date: "15 de mayo, 2017",
@@ -193,7 +179,7 @@ export const projectsData: ProjectData[] = [
     ]
   },
   {
-    id: "13",
+    id: "12",
     title: "Pintura en el Mall del fortin ",
     location: "Km. 25 de la Av. Perimetral, entre la Av. Modesto Luque y la Calle Casuarina",
     date: "01 de marzo, 2024",
