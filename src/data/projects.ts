@@ -19,9 +19,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura Comercial",
     visible: true,
     images: [
-      "/uploads/ejemplo1-a.jpg",
-      "/uploads/ejemplo1-b.jpg",
-      "/uploads/ejemplo1-c.jpg"
+      "/uploads/mc 1.png",
+      "/uploads/mc 2.png",
+      "/uploads/mc 3.png"
     ]
   },
   {
@@ -128,12 +128,82 @@ export const projectsData: ProjectData[] = [
     location: "Samborondon",
     date: "10 de septiembre, 2024",
     description: "El trabajo realizado en la propiedad consistió en el sellado y reparación de fisuras, seguido de la aplicación de Plasmont y un corrector de enlucido para nivelar y alisar las superficies antes del pintado general de las fachadas, complementado con una limpieza profunda y el pintado final de todas las rejas y elementos metálicos para asegurar su protección y renovar su estética.",
-    category: "Pintura de Edificios",
+    category: "Pintura Residencial",
     visible: true,
     images: [
       "/uploads/rinconada 1.png",
       "/uploads/rinconada 2.png",
       "/uploads/rinconada 3.png"
+    ]
+  },
+  {
+    id: "9",
+    title: "Pintura en el Edificio Administrativo de Colgate Palmolive ",
+    location: "Km 16.5, Vía a Daule, Daule",
+    date: "01 de julio, 2024",
+    description: "Se realizó el mantenimiento de pintura en el edificio administrativo de la fábrica Colgate Palmolive. El trabajo consistió en la limpieza del edificio mediante hidrolavado, seguida de una mano de sellador. Posteriormente, se repararon las fisuras existentes y se aplicó corrector de enlucido para nivelar la superficie. Finalmente, se realizaron dos manos de pintura exterior. Este proceso se llevó a cabo con el objetivo de prevenir la humedad y proteger el recubrimiento, evitando que la pintura se deteriore con facilidad.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/uploads/colgate 1.png",
+      "/uploads/colgate 2.png",
+      "/uploads/colgate 3.png"
+    ]
+  },
+  {
+    id: "10",
+    title: "Pintura la cafeteria de Colgate Palmolive ",
+    location: "Km 16.5, Vía a Daule, Daule",
+    date: "01 de julio, 2024",
+    description: "Se realizó el mantenimiento de pintura en cafeteria de la fábrica Colgate Palmolive. El trabajo consistió en la limpieza del edificio mediante hidrolavado, seguida de una mano de sellador. Posteriormente, se repararon las fisuras existentes y se aplicó corrector de enlucido para nivelar la superficie. Finalmente, se realizaron dos manos de pintura exterior. Este proceso se llevó a cabo con el objetivo de prevenir la humedad y proteger el recubrimiento, evitando que la pintura se deteriore con facilidad.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/uploads/Cafeteria 1.png",
+      "/uploads/Cafeteria 2.png",
+      "/uploads/Cafeteria 3.png"
+    ]
+  },
+  {
+    id: "11",
+    title: "Pintura la cafeteria de Colgate Palmolive ",
+    location: "Km 16.5, Vía a Daule, Daule",
+    date: "01 de julio, 2024",
+    description: "Se realizó el mantenimiento de pintura en cafeteria de la fábrica Colgate Palmolive. El trabajo consistió en la limpieza del edificio mediante hidrolavado, seguida de una mano de sellador. Posteriormente, se repararon las fisuras existentes y se aplicó corrector de enlucido para nivelar la superficie. Finalmente, se realizaron dos manos de pintura exterior. Este proceso se llevó a cabo con el objetivo de prevenir la humedad y proteger el recubrimiento, evitando que la pintura se deteriore con facilidad.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/uploads/Cafeteria 1.png",
+      "/uploads/Cafeteria 2.png",
+      "/uploads/Cafeteria 3.png"
+    ]
+  },
+   {
+    id: "12",
+    title: "Pintura en los condominios de las acacias ",
+    location: "sur de Guayaquil, frente al parque del sector TikTok y cerca de la Av. 25 de Julio y el Mall del Sur",
+    date: "15 de mayo, 2017",
+    description: "Se realizó el mantenimiento de pintura en condominios Las Acacias. El trabajo consistió en la limpieza del edificio mediante hidrolavado, seguida de una mano de sellador. Posteriormente, se repararon las fisuras existentes y se aplicó corrector de enlucido para nivelar la superficie. Finalmente, se realizaron dos manos de pintura exterior. Este proceso se llevó a cabo con el objetivo de prevenir la humedad y proteger el recubrimiento, evitando que la pintura se deteriore con facilidad.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/uploads/acacias 1.png",
+      "/uploads/acacias 2.png",
+      "/uploads/acacias 3.png"
+    ]
+  },
+  {
+    id: "13",
+    title: "Pintura en el Mall del fortin ",
+    location: "Km. 25 de la Av. Perimetral, entre la Av. Modesto Luque y la Calle Casuarina",
+    date: "01 de marzo, 2024",
+    description: "Se realizó el mantenimiento de pintura en el Mall El Fortín, donde se pintó un lateral del edificio. El trabajo consistió en la limpieza de la superficie mediante hidrolavado, seguida de una mano de sellador y la reparación de fisuras existentes. Finalmente, se realizaron dos manos de pintura exterior. Este proceso se llevó a cabo con el objetivo de prevenir la humedad y proteger el recubrimiento, evitando que la pintura se deteriore con facilidad..",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/uploads/fortin 1.png",
+      "/uploads/fortin 2.png",
+      "/uploads/fortin 3.png"
     ]
   },
 ];
