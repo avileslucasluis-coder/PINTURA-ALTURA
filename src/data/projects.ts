@@ -108,4 +108,32 @@ export const projectsData: ProjectData[] = [
       "/uploads/ejemplo3-c.jpg"
     ]
   },
+   {
+    id: "8",
+    title: "Pintura en Shopping Duran",
+    location: "El paseo Shopping Duran",
+    date: "15 de mayo, 2015",
+    description: "Se realizó el sellado de superficies y la aplicación de pintura en la fachada del edificio, garantizando una adecuada protección contra la humedad y los agentes climáticos. El trabajo incluyó la preparación de las superficies, aplicación de sellador y acabado con pintura de alta calidad para lograr una terminación uniforme, resistente y de excelente presentación.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [
+      "/uploads/duran 1.png",
+      "/uploads/duran 2.png",
+      "/uploads/duran 3.png"
+    ]
+  },
+  {
+    id: "8",
+    title: "Pintura en ciudadela Rinconada del lago",
+    location: "Samborondon",
+    date: "10 de septiembre, 2024",
+    description: "El trabajo realizado en la propiedad consistió en el sellado y reparación de fisuras, seguido de la aplicación de Plasmont y un corrector de enlucido para nivelar y alisar las superficies antes del pintado general de las fachadas, complementado con una limpieza profunda y el pintado final de todas las rejas y elementos metálicos para asegurar su protección y renovar su estética.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [
+      "/uploads/rinconada 1.png",
+      "/uploads/rinconada 2.png",
+      "/uploads/rinconada 3.png"
+    ]
+  },
 ];
