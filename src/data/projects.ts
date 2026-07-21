@@ -6,7 +6,7 @@ export type ProjectData = {
   description: string;
   category: string;
   visible: boolean;
-  images: [string, string, string]; // Exactamente 3 imágenes
+  images: string[]; // Cualquier cantidad de imágenes
 };
 
 export const projectsData: ProjectData[] = [
@@ -119,7 +119,8 @@ export const projectsData: ProjectData[] = [
     images: [
       "/duran 1.png",
       "/duran 2.png",
-      "/duran 3.png"
+      "/duran 3.png",
+      "/duran 4.png"
     ]
   },
   {
