@@ -19,9 +19,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura Comercial",
     visible: true,
     images: [
-      "/public/mc-1.png",
-      "/public/mc-2.png",
-      "/public/mc-3.png"
+      "public/mc-1.png",
+      "public/mc-2.png",
+      "public/mc-3.png"
     ]
   },
   {
