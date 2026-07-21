@@ -6,7 +6,8 @@ export type ProjectData = {
   description: string;
   category: string;
   visible: boolean;
-  images: string[]; // Cualquier cantidad de imágenes
+  images: string[];
+  video?: string; // URL del video de la proyecto
 };
 
 export const projectsData: ProjectData[] = [
@@ -190,7 +191,9 @@ export const projectsData: ProjectData[] = [
     images: [ 
       "/fortin 1.png",
       "/fortin 2.png",
-      "/fortin 3.png"
+      "/fortin 3.png",
+      "/fortin v1.mp4",
+      "/fortin v2.mp4"
     ]
   },
 ];
