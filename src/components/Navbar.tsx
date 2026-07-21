@@ -21,12 +21,12 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Inicio", href: "/" },
-    { name: "Servicios", href: "/servicios" },
-    { name: "Proyectos", href: "/proyectos" },
-    { name: "Nosotros", href: "/nosotros" },
-    { name: "Testimonios", href: "/testimonios" },
-  ];
+  { name: "Inicio", href: "/" },
+  { name: "Servicios", href: "/servicios" },
+  { name: "Proyectos", href: "/proyectos" },
+  { name: "Nosotros", href: "/#about" },
+  { name: "Testimonios", href: "/#testimonials" },
+];
 
   return (
     <nav
