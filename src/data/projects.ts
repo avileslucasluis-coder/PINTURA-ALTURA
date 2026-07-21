@@ -47,7 +47,7 @@ export const projectsData: ProjectData[] = [
     category: "Pintura Residencial",
     visible: true,
     images: [
-      "/uploads/ejemplo3-a.jpg",
+      "/ejemplo3-a.jpg",
       "/uploads/ejemplo3-b.jpg",
       "/uploads/ejemplo3-c.jpg"
     ]
@@ -103,7 +103,7 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [
-      "/uploads/salinas1.jpg",
+      "/salinas1.jpg",
       "/uploads/ejemplo3-b.jpg",
       "/uploads/ejemplo3-c.jpg"
     ]
@@ -117,9 +117,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [
-      "/uploads/duran 1.png",
-      "/uploads/duran 2.png",
-      "/uploads/duran 3.png"
+      "/duran 1.png",
+      "/duran 2.png",
+      "/duran 3.png"
     ]
   },
   {
@@ -131,9 +131,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura Residencial",
     visible: true,
     images: [
-      "/uploads/rinconada 1.png",
-      "/uploads/rinconada 2.png",
-      "/uploads/rinconada 3.png"
+      "/rinconada 1.png",
+      "/rinconada 2.png",
+      "/rinconada 3.png"
     ]
   },
   {
@@ -145,9 +145,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/uploads/colgate 1.png",
-      "/uploads/colgate 2.png",
-      "/uploads/colgate 3.png"
+      "/colgate 1.png",
+      "/colgate 2.png",
+      "/colgate 3.png"
     ]
   },
   {
@@ -159,9 +159,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/uploads/Cafeteria 1.png",
-      "/uploads/Cafeteria 2.png",
-      "/uploads/Cafeteria 3.png"
+      "/Cafeteria 1.png",
+      "/Cafeteria 2.png",
+      "/Cafeteria 3.png"
     ]
   },
    {
@@ -173,9 +173,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/uploads/acacias 1.png",
-      "/uploads/acacias 2.png",
-      "/uploads/acacias 3.png"
+      "/acacias 1.png",
+      "/acacias 2.png",
+      "/acacias 3.png"
     ]
   },
   {
@@ -187,9 +187,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/uploads/fortin 1.png",
-      "/uploads/fortin 2.png",
-      "/uploads/fortin 3.png"
+      "/fortin 1.png",
+      "/fortin 2.png",
+      "/fortin 3.png"
     ]
   },
 ];
