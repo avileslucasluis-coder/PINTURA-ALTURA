@@ -6,6 +6,14 @@ import { MapPin, Calendar, ChevronLeft, ChevronRight, X, ZoomIn, Eye } from "luc
 import Image from "next/image";
 import { ProjectData } from "@/data/projects";
 
+type MediaItem = { type: "image" | "video"; src: string };
+
+function getProjectMedia(project: ProjectData): MediaItem[] {
+  const imageItems: MediaItem[] = project.images.map((src) => ({ type: "image", src }));
+  const videoItems: MediaItem[] = (project.video ?? []).map((src) => ({ type: "video", src }));
+  return [...imageItems, ...videoItems];
+}
+
 function useIntersectionObserver(threshold = 0.1) {
   const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -34,21 +42,38 @@ function useIntersectionObserver(threshold = 0.1) {
   return { visibleItems, observe };
 }
 
-function ImageCarousel({ images, title }: { images: string[]; title: string }) {
+function MediaCarousel({ media, title }: { media: MediaItem[]; title: string }) {
   const [current, setCurrent] = useState(0);
 
-  if (images.length === 0) return null;
-  if (images.length === 1) {
+  if (media.length === 0) return null;
+
+  const renderMedia = (item: MediaItem, alt: string) => {
+    if (item.type === "video") {
+      return (
+        <video
+          src={item.src}
+          className="w-full h-full object-cover portfolio-image"
+          muted
+          loop
+          playsInline
+          autoPlay
+        />
+      );
+    }
     return (
       <Image
-        src={images[0]}
-        alt={title}
+        src={item.src}
+        alt={alt}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover portfolio-image"
         loading="lazy"
       />
     );
+  };
+
+  if (media.length === 1) {
+    return renderMedia(media[0], title);
   }
 
   return (
@@ -62,39 +87,32 @@ function ImageCarousel({ images, title }: { images: string[]; title: string }) {
           transition={{ duration: 0.3 }}
           className="absolute inset-0"
         >
-          <Image
-            src={images[current]}
-            alt={`${title} - ${current + 1}`}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover portfolio-image"
-            loading="lazy"
-          />
+          {renderMedia(media[current], `${title} - ${current + 1}`)}
         </motion.div>
       </AnimatePresence>
 
       <button
-        onClick={(e) => { e.stopPropagation(); setCurrent((p) => (p - 1 + images.length) % images.length); }}
+        onClick={(e) => { e.stopPropagation(); setCurrent((p) => (p - 1 + media.length) % media.length); }}
         className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="Imagen anterior"
+        aria-label="Anterior"
       >
         <ChevronLeft size={18} />
       </button>
       <button
-        onClick={(e) => { e.stopPropagation(); setCurrent((p) => (p + 1) % images.length); }}
+        onClick={(e) => { e.stopPropagation(); setCurrent((p) => (p + 1) % media.length); }}
         className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="Siguiente imagen"
+        aria-label="Siguiente"
       >
         <ChevronRight size={18} />
       </button>
 
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-        {images.map((_, i) => (
+        {media.map((_, i) => (
           <button
             key={i}
             onClick={(e) => { e.stopPropagation(); setCurrent(i); }}
             className={`carousel-dot ${i === current ? 'active' : ''}`}
-            aria-label={`Imagen ${i + 1}`}
+            aria-label={`Elemento ${i + 1}`}
           />
         ))}
       </div>
@@ -103,13 +121,13 @@ function ImageCarousel({ images, title }: { images: string[]; title: string }) {
 }
 
 function Lightbox({
-  images,
+  media,
   currentIndex,
   onClose,
   onPrev,
   onNext,
 }: {
-  images: string[];
+  media: MediaItem[];
   currentIndex: number;
   onClose: () => void;
   onPrev: () => void;
@@ -129,6 +147,8 @@ function Lightbox({
     };
   }, [onClose, onPrev, onNext]);
 
+  const current = media[currentIndex];
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -145,7 +165,7 @@ function Lightbox({
         <X size={32} />
       </button>
 
-      {images.length > 1 && (
+      {media.length > 1 && (
         <>
           <button
             onClick={(e) => { e.stopPropagation(); onPrev(); }}
@@ -173,18 +193,27 @@ function Lightbox({
         className="relative w-[90vw] h-[80vh] max-w-5xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <Image
-          src={images[currentIndex]}
-          alt={"Proyecto"}
-          fill
-          className="object-contain"
-          sizes="90vw"
-          priority
-        />
+        {current.type === "video" ? (
+          <video
+            src={current.src}
+            className="w-full h-full object-contain"
+            controls
+            autoPlay
+          />
+        ) : (
+          <Image
+            src={current.src}
+            alt={"Proyecto"}
+            fill
+            className="object-contain"
+            sizes="90vw"
+            priority
+          />
+        )}
       </motion.div>
 
       <div className="absolute bottom-6 text-white/60 text-sm">
-        {currentIndex + 1} / {images.length}
+        {currentIndex + 1} / {media.length}
       </div>
     </motion.div>
   );
@@ -192,7 +221,7 @@ function Lightbox({
 
 export function Portfolio({ projects }: { projects: ProjectData[] }) {
   const [filter, setFilter] = useState("Todos");
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{ media: MediaItem[]; index: number } | null>(null);
   const { visibleItems, observe } = useIntersectionObserver(0.1);
 
   const categories = ["Todos", ...Array.from(new Set(projects.map(p => p.category)))];
@@ -202,8 +231,9 @@ export function Portfolio({ projects }: { projects: ProjectData[] }) {
     : projects.filter(p => p.category === filter);
 
   const openLightbox = (project: ProjectData, index = 0) => {
-    if (project.images.length > 0) {
-      setLightbox({ images: project.images, index });
+    const media = getProjectMedia(project);
+    if (media.length > 0) {
+      setLightbox({ media, index });
     }
   };
 
@@ -255,6 +285,7 @@ export function Portfolio({ projects }: { projects: ProjectData[] }) {
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => {
               const isVisible = visibleItems.has(`project-${project.id}`);
+              const media = getProjectMedia(project);
 
               return (
                 <motion.div
@@ -278,8 +309,8 @@ export function Portfolio({ projects }: { projects: ProjectData[] }) {
                   onClick={() => openLightbox(project)}
                 >
                   <div className="relative h-72 overflow-hidden bg-slate-100">
-                    {project.images.length > 0 ? (
-                      <ImageCarousel images={project.images} title={project.title} />
+                    {media.length > 0 ? (
+                      <MediaCarousel media={media} title={project.title} />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-400">
                         <div className="text-center">
@@ -302,9 +333,9 @@ export function Portfolio({ projects }: { projects: ProjectData[] }) {
                       {project.category}
                     </div>
 
-                    {project.images.length > 1 && (
+                    {media.length > 1 && (
                       <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-white z-[3]">
-                        {project.images.length} fotos
+                        {media.length} elementos
                       </div>
                     )}
                   </div>
@@ -350,11 +381,11 @@ export function Portfolio({ projects }: { projects: ProjectData[] }) {
       <AnimatePresence>
         {lightbox && (
           <Lightbox
-            images={lightbox.images}
+            media={lightbox.media}
             currentIndex={lightbox.index}
             onClose={() => setLightbox(null)}
-            onPrev={() => setLightbox(prev => prev ? { ...prev, index: (prev.index - 1 + prev.images.length) % prev.images.length } : null)}
-            onNext={() => setLightbox(prev => prev ? { ...prev, index: (prev.index + 1) % prev.images.length } : null)}
+            onPrev={() => setLightbox(prev => prev ? { ...prev, index: (prev.index - 1 + prev.media.length) % prev.media.length } : null)}
+            onNext={() => setLightbox(prev => prev ? { ...prev, index: (prev.index + 1) % prev.media.length } : null)}
           />
         )}
       </AnimatePresence>
