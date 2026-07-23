@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Calendar, ChevronLeft, ChevronRight, X, ZoomIn, Eye } from "lucide-react";
 import Image from "next/image";
@@ -12,34 +12,6 @@ function getProjectMedia(project: ProjectData): MediaItem[] {
   const imageItems: MediaItem[] = project.images.map((src) => ({ type: "image", src }));
   const videoItems: MediaItem[] = (project.video ?? []).map((src) => ({ type: "video", src }));
   return [...imageItems, ...videoItems];
-}
-
-function useIntersectionObserver(threshold = 0.1) {
-  const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleItems((prev) => new Set(prev).add(entry.target.id));
-          }
-        });
-      },
-      { threshold, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    return () => observerRef.current?.disconnect();
-  }, [threshold]);
-
-  const observe = useCallback((element: HTMLElement | null) => {
-    if (element && observerRef.current) {
-      observerRef.current.observe(element);
-    }
-  }, []);
-
-  return { visibleItems, observe };
 }
 
 function MediaCarousel({ media, title }: { media: MediaItem[]; title: string }) {
@@ -67,7 +39,7 @@ function MediaCarousel({ media, title }: { media: MediaItem[]; title: string }) 
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover portfolio-image"
-        loading="lazy"
+        priority={false}
       />
     );
   };
@@ -133,20 +105,6 @@ function Lightbox({
   onPrev: () => void;
   onNext: () => void;
 }) {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [onClose, onPrev, onNext]);
-
   const current = media[currentIndex];
 
   return (
@@ -222,7 +180,6 @@ function Lightbox({
 export function Portfolio({ projects }: { projects: ProjectData[] }) {
   const [filter, setFilter] = useState("Todos");
   const [lightbox, setLightbox] = useState<{ media: MediaItem[]; index: number } | null>(null);
-  const { visibleItems, observe } = useIntersectionObserver(0.1);
 
   const categories = ["Todos", ...Array.from(new Set(projects.map(p => p.category)))];
 
@@ -284,25 +241,19 @@ export function Portfolio({ projects }: { projects: ProjectData[] }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => {
-              const isVisible = visibleItems.has(`project-${project.id}`);
               const media = getProjectMedia(project);
 
               return (
                 <motion.div
                   key={project.id}
                   id={`project-${project.id}`}
-                  ref={observe}
                   layout
-                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                  animate={{
-                    opacity: isVisible ? 1 : 0,
-                    y: isVisible ? 0 : 40,
-                    scale: isVisible ? 1 : 0.95
-                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
                   transition={{
-                    duration: 0.6,
-                    delay: index * 0.08,
+                    duration: 0.4,
+                    delay: Math.min(index * 0.05, 0.3),
                     ease: [0.4, 0, 0.2, 1]
                   }}
                   className="portfolio-card bg-white rounded-2xl overflow-hidden shadow-md group border border-slate-100/80 flex flex-col cursor-pointer"
