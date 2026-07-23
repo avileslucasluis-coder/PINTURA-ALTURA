@@ -6,7 +6,11 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { Plus, Edit2, Trash2, ArrowLeft } from "lucide-react";
+import {
+  Plus, Edit2, Trash2, ArrowLeft, Wrench, PaintBucket, Paintbrush,
+  Building, Building2, Home, Shield, Sparkles, HardHat, Ruler,
+  Droplet, Sun, Layers, CheckCircle, Star
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 
 type Service = {
@@ -16,6 +20,53 @@ type Service = {
   icon?: string;
   order: number;
 };
+
+// Mapa de nombres de ícono (escritos en el formulario) a componentes reales de lucide-react
+const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+  paintbrush: Paintbrush,
+  brush: Paintbrush,
+  paintbucket: PaintBucket,
+  bucket: PaintBucket,
+  building: Building,
+  building2: Building2,
+  edificio: Building,
+  home: Home,
+  casa: Home,
+  shield: Shield,
+  seguridad: Shield,
+  sparkles: Sparkles,
+  hardhat: HardHat,
+  casco: HardHat,
+  ruler: Ruler,
+  medida: Ruler,
+  droplet: Droplet,
+  gota: Droplet,
+  sun: Sun,
+  sol: Sun,
+  layers: Layers,
+  capas: Layers,
+  check: CheckCircle,
+  star: Star,
+  estrella: Star,
+};
+
+function ServiceIcon({ icon }: { icon?: string }) {
+  if (!icon) return <Wrench size={28} />;
+
+  const normalized = icon.trim().toLowerCase().replace(/[\s_-]/g, "");
+  const IconComponent = iconMap[normalized];
+
+  if (IconComponent) {
+    return <IconComponent size={28} />;
+  }
+
+  // Si no coincide con ningún ícono conocido pero el texto es un emoji corto, lo mostramos tal cual
+  if (icon.length <= 2) {
+    return <span className="text-2xl">{icon}</span>;
+  }
+
+  return <Wrench size={28} />;
+}
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
@@ -166,13 +217,18 @@ export default function ServicesPage() {
                   rows={4}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-primary"
                 />
-                <input
-                  type="text"
-                  placeholder="Nombre del ícono (lucide-react)"
-                  value={formData.icon}
-                  onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                  className="px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-primary"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Nombre del ícono"
+                    value={formData.icon}
+                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                    className="px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-primary w-full"
+                  />
+                  <p className="text-xs text-slate-500 mt-1.5">
+                    Opciones: paintbrush, building, home, shield, sparkles, hardhat, ruler, droplet, sun, layers, check, star
+                  </p>
+                </div>
                 <div className="flex gap-4">
                   <button
                     type="submit"
@@ -206,7 +262,7 @@ export default function ServicesPage() {
                   key={service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: Math.min(index * 0.08, 0.3) }}
                   className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all border border-slate-100 group relative"
                 >
                   {isAdmin && (
@@ -227,8 +283,8 @@ export default function ServicesPage() {
                   )}
 
                   <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
-                    <div className="text-2xl text-primary group-hover:text-white transition-colors">
-                      {service.icon || "⚙️"}
+                    <div className="text-primary group-hover:text-white transition-colors">
+                      <ServiceIcon icon={service.icon} />
                     </div>
                   </div>
 
