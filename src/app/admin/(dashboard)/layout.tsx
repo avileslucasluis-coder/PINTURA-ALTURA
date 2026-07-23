@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Home, LayoutDashboard, PaintRoller, Settings } from "lucide-react";
+import { Home, LayoutDashboard, PaintRoller, Settings, MessageSquareText } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -35,6 +35,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           >
             <LayoutDashboard size={20} />
             <span>Proyectos</span>
+          </Link>
+          <Link
+            href="/admin/reviews"
+            className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+          >
+            <MessageSquareText size={20} />
+            <span>Reseñas</span>
           </Link>
           <Link
             href="/"
