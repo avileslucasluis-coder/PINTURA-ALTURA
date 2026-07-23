@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
@@ -16,33 +16,6 @@ function getProjectMedia(project: ProjectData): MediaItem[] {
   const imageItems: MediaItem[] = project.images.map((src) => ({ type: "image", src }));
   const videoItems: MediaItem[] = (project.video ?? []).map((src) => ({ type: "video", src }));
   return [...imageItems, ...videoItems];
-}
-
-function useIntersectionObserver(threshold = 0.1) {
-  const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleItems((prev) => new Set(prev).add(entry.target.id));
-          }
-        });
-      },
-      { threshold, rootMargin: "0px 0px -30px 0px" }
-    );
-    return () => observerRef.current?.disconnect();
-  }, [threshold]);
-
-  const observe = useCallback((element: HTMLElement | null) => {
-    if (element && observerRef.current) {
-      observerRef.current.observe(element);
-    }
-  }, []);
-
-  return { visibleItems, observe };
 }
 
 function MediaCarousel({ media, title }: { media: MediaItem[]; title: string }) {
@@ -70,7 +43,6 @@ function MediaCarousel({ media, title }: { media: MediaItem[]; title: string }) 
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover portfolio-image"
-        loading="lazy"
       />
     );
   };
@@ -124,7 +96,6 @@ function MediaCarousel({ media, title }: { media: MediaItem[]; title: string }) 
 export default function ProyectosPage() {
   const [filter, setFilter] = useState("Todos");
   const [lightbox, setLightbox] = useState<{ media: MediaItem[]; index: number } | null>(null);
-  const { visibleItems, observe } = useIntersectionObserver(0.1);
 
   // Filtramos por visibilidad y luego por categoría
   const projects = projectsData.filter(p => p.visible);
@@ -207,18 +178,16 @@ export default function ProyectosPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project, index) => {
-              const isVisible = visibleItems.has(`project-${project.id}`);
               const media = getProjectMedia(project);
               
               return (
-                <div
+                <motion.div
                   key={project.id}
                   id={`project-${project.id}`}
-                  ref={observe}
-                  className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 group flex flex-col h-full transition-all duration-700 ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-                  }`}
-                  style={{ transitionDelay: `${index % 3 * 100}ms` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: Math.min((index % 3) * 0.08, 0.24) }}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 group flex flex-col h-full"
                 >
                   <div className="relative h-64 overflow-hidden bg-slate-100">
                     <MediaCarousel media={media} title={project.title} />
@@ -261,7 +230,7 @@ export default function ProyectosPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
