@@ -22,7 +22,18 @@ export const projectsData: ProjectData[] = [
     images: [
       "/mc-1.png",
       "/mc-2.png",
-      "/mc-3.png"
+      "/mc-3.png",
+      "/mc 4.png",
+      "/mc 5.png",
+      "/mc 6.png",
+      "/mc 7.png",
+      "/mc 8.png",
+      "/mc 9.png",
+      "/mc 10.png",
+    ],
+  video: [ 
+      "/mc v1.mp4",
+      "/mc v2.mp4"
     ]
   },
   {
@@ -149,7 +160,14 @@ export const projectsData: ProjectData[] = [
     images: [ 
       "/colgate 1.png",
       "/colgate 2.png",
-      "/colgate 3.png"
+      "/colgate 3.png",
+      "/colgate 4.png",
+      "/colgate 5.png",
+      "/colgate 6.png",
+      "/colgate 7.png"
+    ],
+    video: [ 
+      "/colgate v1.mp4"
     ]
   },
   {
@@ -163,7 +181,9 @@ export const projectsData: ProjectData[] = [
     images: [ 
       "/Cafeteria 1.png",
       "/Cafeteria 2.png",
-      "/Cafeteria 3.png"
+      "/Cafeteria 3.png",
+      "/Cafeteria 4.jpeg",
+      "/cafeteria 5.jpeg"
     ]
   },
    {
@@ -177,7 +197,15 @@ export const projectsData: ProjectData[] = [
     images: [ 
       "/acacias 1.png",
       "/acacias 2.png",
-      "/acacias 3.png"
+      "/acacias 3.png",
+      "/acacias 4.jpg",
+      "/acacias 5.jpg",
+      "/acacias 6.jpg",
+      "/acacias 7.jpg",
+      "/acacias 8.jpg",
+      "/acacias 9.jpg",
+      "/acacias 10.jpg",
+      "/acacias 11.jpg"
     ]
   },
   {
@@ -191,11 +219,46 @@ export const projectsData: ProjectData[] = [
     images: [ 
       "/fortin 1.png",
       "/fortin 2.png",
-      "/fortin 3.png"
+      "/fortin 3.png",
+      "/fortin 4.jpg",
+      "/fortin 5.jpg"
     ],
     video: [ 
       "/fortin v1.mp4",
-      "/fortin v2.mp4"
+      "/fortin v2.mp4",
+      "/fortin v3.mp4"
+    ]
+  },
+  {
+    id: "13",
+    title: "Pintura en el cuartel modelo ",
+    location: "AV. Las America",
+    date: "15 de agosto, 2016",
+    description: "Se realizó el trabajo de pintura exterior en el cuartel modelo . El personal, equipado con arnés, casco y todo el equipo de seguridad industrial requerido, trabajó de forma simultánea en distintos puntos de la fachada para optimizar los tiempos de ejecución. El proceso incluyó la aplicación de pintura exterior de alta resistencia sobre toda la superficie, cubriendo tanto las caras principales como los laterales del edificio, garantizando un acabado uniforme y de calidad en altura. Todo el trabajo se ejecutó bajo estrictas normas de seguridad industrial, minimizando riesgos tanto para el personal como para el entorno.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/av 1.jpg",
+      "/av 2.jpg",
+      "/av 3.jpg",
+      "/av 4.jpg",
+      "/av 5.jpg"
+    ]
+  },
+  {
+    id: "14",
+    title: "Pintura en el tanque industrial Mall del Fortin  ",
+    location: "Km. 25 de la Av. Perimetral, entre la Av. Modesto Luque y la Calle Casuarina",
+    date: "15 de diciembre, 2024",
+    description:  "Se realizó el trabajo de pintura en el tanque industrial ubicado en las instalaciones del Mall El Fortín, bajo la estructura representativa del colibrí. El trabajo se ejecutó mediante técnica de rappel con cuerdas certificadas, dada la altura y la forma cilíndrica de la estructura. El proceso incluyó la preparación de la superficie y la aplicación de pintura en franjas por secciones, cubriendo la totalidad del tanque con los colores correspondientes a su diseño. Todo el trabajo se realizó bajo estrictas normas de seguridad industrial, con el personal debidamente equipado con arnés, casco y línea de vida.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/cir 1.jpg",
+      "/cir 2.jpg",
+      "/cir 3.jpg",
+      "/cir 4.jpg",
+      "/cir 5.jpg"
     ]
   },
 ];
