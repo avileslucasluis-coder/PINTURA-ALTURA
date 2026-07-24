@@ -23,13 +23,13 @@ export const projectsData: ProjectData[] = [
       "/mc-1.png",
       "/mc-2.png",
       "/mc-3.png",
-      "/mc 4.png",
-      "/mc 5.png",
-      "/mc 6.png",
-      "/mc 7.png",
-      "/mc 8.png",
-      "/mc 9.png",
-      "/mc 10.png",
+      "/mc 4.jpg",
+      "/mc 5.jpg",
+      "/mc 6.jpg",
+      "/mc 7.jpg",
+      "/mc 8.jpg",
+      "/mc 9.jpg",
+      "/mc 10.jpg",
     ],
   video: [ 
       "/mc v1.mp4",
@@ -146,7 +146,9 @@ export const projectsData: ProjectData[] = [
     images: [
       "/rinconada 1.png",
       "/rinconada 2.png",
-      "/rinconada 3.png"
+      "/rinconada 3.png",
+      "/rinconada 4.jpg",
+      "/rinconada 5.jpg"
     ]
   },
   {
@@ -259,6 +261,41 @@ export const projectsData: ProjectData[] = [
       "/cir 3.jpg",
       "/cir 4.jpg",
       "/cir 5.jpg"
+    ]
+  },
+  {
+    id: "15",
+    title: "Pintura en el parqueadero del edificio el fortin  ",
+    location: "Padre Juan Bautista Aguirre Carbo 102-114",
+    date: "15 de junio, 2025",
+    description:  "Se realizó el trabajo de señalización y demarcación en el parqueadero del edificio, el cual consistió en la pintura de franjas de seguridad en amarillo y negro sobre columnas y pilares de la estructura, así como en topes de seguridad para vehículos. Adicionalmente, se realizó la rotulación numerada de los espacios de parqueo asignados, aplicando el diseño correspondiente a cada puesto sobre las paredes. Todo el trabajo se ejecutó con pintura de alta durabilidad, adecuada para tráfico vehicular y uso constante, garantizando visibilidad y señalización clara dentro de las instalaciones." ,
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [ 
+      "/par 1.jpg",
+      "/par 2.jpg",
+      "/par 3.jpg",
+      "/par 4.jpg",
+      "/par 5.jpg"
+    ]
+  },
+  {
+    id: "16",
+    title: "Pintura en la ciudadela vista sol  ",
+    location: "kilómetro 7.8 de la Avenida Samborondón (Avenida Principal 7850), en el cantón Samborondón, provincia del Guayas, junto a la Iglesia San José.",
+    date: "15 de junio, 2025",
+    description:  "Se realizó el trabajo de pintura exterior en viviendas residenciales dentro de un conjunto habitacional cerrado. El trabajo incluyó la aplicación de pintura en fachadas de dos niveles, molduras, aleros y cornisas, respetando los diseños arquitectónicos personalizados de cada vivienda, incluyendo combinaciones de color en tonos morado, mostaza y gris. Se trabajó también en áreas de difícil acceso como pasillos laterales estrechos y zonas cercanas a piscina, cuidando el acabado en cada detalle. El proceso incluyó preparación de superficie, protección de áreas circundantes (jardines, mobiliario y acabados existentes) y aplicación de pintura de alta calidad para exteriores, garantizando durabilidad y un acabado uniforme." ,
+    category: "Pintura Residencial",
+    visible: true,
+    images: [ 
+      "/punt 1.jpg",
+      "/punt 2.jpg",
+      "/punt 3.jpg",
+      "/punt 4.jpg",
+      "/punt 5.jpg",
+      "/punt 6.jpg",
+      "/punt 7.jpg",
+      "/punt 8.jpg"
     ]
   },
 ];
