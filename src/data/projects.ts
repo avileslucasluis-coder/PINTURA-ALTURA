@@ -23,13 +23,13 @@ export const projectsData: ProjectData[] = [
       "/mc-1.png",
       "/mc-2.png",
       "/mc-3.png",
-      "/mc 4.jpg",
-      "/mc 5.jpg",
-      "/mc 6.jpg",
-      "/mc 7.jpg",
-      "/mc 8.jpg",
-      "/mc 9.jpg",
-      "/mc 10.jpg",
+      "/mc 4.jpeg",
+      "/mc 5.jpeg",
+      "/mc 6.jpeg",
+      "/mc 7.jpeg",
+      "/mc 8.jpeg",
+      "/mc 9.jpeg",
+      "/mc 10.jpeg",
     ],
   video: [ 
       "/mc v1.mp4",
@@ -45,9 +45,9 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [
-      "/gri 1.jpg",
-      "/gri 2.jpg",
-      "/gri 3.jpg"
+      "/gri 1.jpeg",
+      "/gri 2.jpeg",
+      "/gri 3.jpeg"
     ]
   },
    {
@@ -109,8 +109,8 @@ export const projectsData: ProjectData[] = [
       "/rinconada 1.png",
       "/rinconada 2.png",
       "/rinconada 3.png",
-      "/rinconada 4.jpg",
-      "/rinconada 5.jpg"
+      "/rinconada 4.jpeg",
+      "/rinconada 5.jpeg"
     ]
   },
   {
@@ -184,8 +184,8 @@ export const projectsData: ProjectData[] = [
       "/fortin 1.png",
       "/fortin 2.png",
       "/fortin 3.png",
-      "/fortin 4.jpg",
-      "/fortin 5.jpg"
+      "/fortin 4.jpeg",
+      "/fortin 5.jpeg"
     ],
     video: [ 
       "/fortin v1.mp4",
@@ -202,11 +202,11 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/av 1.jpg",
-      "/av 2.jpg",
-      "/av 3.jpg",
-      "/av 4.jpg",
-      "/av 5.jpg"
+      "/av 1.jpeg",
+      "/av 2.jpeg",
+      "/av 3.jpeg",
+      "/av 4.jpeg",
+      "/av 5.jpeg"
     ]
   },
   {
@@ -218,11 +218,11 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/cir 1.jpg",
-      "/cir 2.jpg",
-      "/cir 3.jpg",
-      "/cir 4.jpg",
-      "/cir 5.jpg"
+      "/cir 1.jpeg",
+      "/cir 2.jpeg",
+      "/cir 3.jpeg",
+      "/cir 4.jpeg",
+      "/cir 5.jpeg"
     ]
   },
   {
@@ -234,11 +234,11 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/par 1.jpg",
-      "/par 2.jpg",
-      "/par 3.jpg",
-      "/par 4.jpg",
-      "/par 5.jpg"
+      "/par 1.jpeg",
+      "/par 2.jpeg",
+      "/par 3.jpeg",
+      "/par 4.jpeg",
+      "/par 5.jpeg"
     ]
   },
   {
@@ -250,14 +250,14 @@ export const projectsData: ProjectData[] = [
     category: "Pintura Residencial",
     visible: true,
     images: [ 
-      "/punt 1.jpg",
-      "/punt 2.jpg",
-      "/punt 3.jpg",
-      "/punt 4.jpg",
-      "/punt 5.jpg",
-      "/punt 6.jpg",
-      "/punt 7.jpg",
-      "/punt 8.jpg"
+      "/punt 1.jpeg",
+      "/punt 2.jpeg",
+      "/punt 3.jpeg",
+      "/punt 4.jpeg",
+      "/punt 5.jpeg",
+      "/punt 6.jpeg",
+      "/punt 7.jpeg",
+      "/punt 8.jpeg"
     ]
   },
   {
@@ -269,10 +269,10 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [ 
-      "/rom 1.jpg",
-      "/rom 2.jpg",
-      "/rom 3.jpg",
-      "/rom 4.jpg",
+      "/rom 1.jpeg",
+      "/rom 2.jpeg",
+      "/rom 3.jpeg",
+      "/rom 4.jpeg",
     ]
   },
   {
@@ -284,10 +284,10 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [
-      "/rios 1.jpg",
-      "/rios 2.jpg",
-      "/rios 3.jpg",
-      "/rios 4.jpg"
+      "/rios 1.jpeg",
+      "/rios 2.jpeg",
+      "/rios 3.jpeg",
+      "/rios 4.jpeg"
     ]
   },
 {
