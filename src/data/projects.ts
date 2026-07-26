@@ -45,67 +45,26 @@ export const projectsData: ProjectData[] = [
     category: "Pintura de Edificios",
     visible: true,
     images: [
-      "/uploads/ejemplo2-a.jpg",
-      "/uploads/ejemplo2-b.jpg",
-      "/uploads/ejemplo2-c.jpg"
+      "/gri 1.jpg",
+      "/gri 2.jpg",
+      "/gri 3.jpg"
     ]
   },
-  {
-    id: "3",
-    title: "Pintura Exterior e Interior de Casa",
-    location: "Urb. Aurora",
-    date: "15 de Septiembre, 2024",
-    description: "Servicio completo de pintura exterior e interior en vivienda residencial, incluyendo preparación de superficies y acabados de calidad.",
-    category: "Pintura Residencial",
-    visible: true,
-    images: [
-      "/ejemplo3-a.jpg",
-      "/uploads/ejemplo3-b.jpg",
-      "/uploads/ejemplo3-c.jpg"
-    ]
-  },
-    {
-    id: "4",
-    title: "Pintura Exterior en Condominio",
-    location: "Antepara y Pedro Pablo Gomez",
-    date: "25 de Marzo, 2026",
-    description: "Mantenimiento integral de la fachada del edificio, que incluye rasqueteo de pintura deteriorada, reparación y sellado de fisuras, preparación de superficies y aplicación de pintura en fachadas, columnas, losas, balcones y rejas, garantizando un acabado uniforme, estético y de larga duración.",
-    category: "Pintura de Edificios",
-    visible: true,
-    images: [
-      "/uploads/ejemplo2-a.jpg",
-      "/uploads/ejemplo2-b.jpg",
-      "/uploads/ejemplo2-c.jpg"
-    ]
-  },
-    {
-    id: "5",
-    title: "Pintura interior en departamento",
-    location: "Jose de Antepara entre Luque y Velez",
-    date: "04 de Mayo, 2026",
-    description: "Mantenimiento de pintura del departamento, que incluye preparación de superficies, rasqueteo, reparación de fisuras, empastado, lijado, sellado y aplicación de pintura para lograr un acabado uniforme y duradero.",
-    category: "Pintura Residencial",
-    visible: true,
-    images: [
-      "/uploads/ejemplo3-a.jpg",
-      "/uploads/ejemplo3-b.jpg",
-      "/uploads/ejemplo3-c.jpg"
-    ]
-  },
-      {
+   {
     id: "6",
-    title: "Pintura interior en bodega",
+    title: "Impermeabilización de Losa",
     location: "Jose de Antepara entre Luque y Velez",
     date: "27 de Abril, 2026",
-    description: "Mantenimiento de pintura del departamento, que incluye preparación de superficies, rasqueteo, reparación de fisuras, empastado, lijado, sellado y aplicación de pintura para lograr un acabado uniforme y duradero.",
-    category: "Pintura Residencial",
+    description: "Trabajo de impermeabilización de losa, que incluye limpieza y preparación de la superficie, reparación de fisuras y grietas, sellado de juntas, aplicación de manto asfáltico o membrana impermeabilizante, y capa de protección final para evitar filtraciones de agua y humedad.",
+    category: "Impermeabilización",
     visible: true,
-    images: [
-      "/uploads/ejemplo3-a.jpg",
-      "/uploads/ejemplo3-b.jpg",
-      "/uploads/ejemplo3-c.jpg"
+    images: [],
+    video: [
+      "/gri v1.mp4",
+      "/gri v2.mp4",
+      "/gri v3.mp4"
     ]
-  },
+   },
       {
     id: "7",
     title: "Pintura en edificio",
@@ -510,7 +469,7 @@ export const projectsData: ProjectData[] = [
       "/ken 4.jpeg"
     ]
     },
-        {
+    {
     id: "27",
     title: "Pintura exterior en Condominio",
     location: "Kenedy Norte.",
@@ -523,6 +482,67 @@ export const projectsData: ProjectData[] = [
       "/ken 2.jpeg",
       "/ken 3.jpeg",
       "/ken 4.jpeg"
+    ]
+    },
+    {
+    id: "28",
+    title: "Pintura Exterior de Vivienda en La Alborada",
+    location: "La Alborada, Guayaquil",
+    date: "25 de enero, 2023",
+    description: "Se realizó la pintura exterior completa de esta vivienda de dos plantas ubicada en el sector de La Alborada. El trabajo incluyó el cambio de color de fachada a tonos coral/salmón con detalles decorativos en crema, resaltando molduras geométricas, arco de ventana principal y cornisas. Se pintaron también las columnas laterales, pasillos internos y áreas de acceso, incluyendo preparación de superficie, sellado y acabado final con protección de rejas y elementos metálicos.",
+    category: "Pintura Residencial",
+    visible: true,
+    images: [
+      "/calb 1.jpeg",
+      "/calb 2.jpeg",
+      "/calb 3.jpeg",
+      "/calb 4.jpeg",
+      "/calb 5.jpeg",
+      "/calb 6.jpeg",
+      "/calb 7.jpeg",
+      "/calb 8.jpeg",
+      "/calb 9.jpeg"
+    ]
+    },
+    {
+    id: "29",
+    title: "Pintura Exterior de Edificio en Av. Francisco de Orellana",
+    location: "Av. Francisco de Orellana, Río Centro Sur, Guayaquil",
+    date: "30 de septiembre, 2023",
+    description: "Se realizó la pintura exterior completa de este edificio de varias plantas ubicado en la Av. Francisco de Orellana, sector Río Centro Sur. El trabajo se ejecutó mediante técnica de rappel con cuerdas de seguridad, cubriendo la totalidad de la fachada principal y lateral en tonos gris perla, incluyendo el sellado de fisuras, preparación de superficie y acabado final alrededor de ventanas y equipos de aire acondicionado instalados en la fachada.",
+    category: "Pintura de Edificios",
+    visible: true,
+    images: [
+      "/ore 1.jpeg",
+      "/ore 2.jpeg",
+      "/ore 3.jpeg",
+      "/ore 4.jpeg"
+    ]
+    },
+    {
+    id: "31",
+    title: "Pintura Interior en Centro Comercial El Paseo Shopping",
+    location: "El Paseo Shopping, Quevedo",
+    date: "20 de agosto, 2019",
+    description: "Se realizó el trabajo de pintura interior en el Centro Comercial El Paseo Shopping de Quevedo, específicamente en la zona de cines y pasillos comerciales. El trabajo incluyó la pintura en tono azul intenso de paredes de doble altura junto a la cartelera de cines, utilizando andamios para alcanzar las zonas más altas, así como el retoque y acabado de paredes en áreas comunes cercanas a locales como Fun Zone y la zona de óptica GMO, cuidando el detalle alrededor de carteleras, luces empotradas y elementos decorativos existentes.",
+    category: "Pintura Comercial",
+    visible: true,
+    images: [
+      "/sho 1.jpeg",
+      "/sho 2.jpeg",
+      "/sho 3.jpeg",
+      "/sho 4.jpeg",
+      "/sho 5.jpeg",
+      "/sho 6.jpeg",
+      "/sho 7.jpeg",
+      "/sho 8.jpeg",
+      "/sho 9.jpeg",
+      "/sho 10.jpeg",
+      "/sho 11.jpeg",
+      "/sho 12.jpeg",
+      "/sho 13.jpeg",
+      "/sho 14.jpeg",
+      "/sho 15.jpeg"
     ]
     },
 ];
