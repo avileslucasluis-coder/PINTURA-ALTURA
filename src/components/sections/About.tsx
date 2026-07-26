@@ -25,7 +25,7 @@ export function About() {
           >
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
               <Image 
-                src="https://images.unsplash.com/photo-1541888045610-18e47eb5ce15?q=80&w=1964&auto=format&fit=crop"
+                src="/logo.png"
                 alt="Pintor en altura trabajando"
                 fill
                 className="object-cover"
