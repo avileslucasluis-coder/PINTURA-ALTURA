@@ -1,7 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Paintbrush2, Building2, Mountain, Droplet, Brush, Construction, Wrench, ShieldCheck } from "lucide-react";
+import {
+  Paintbrush2,
+  Building2,
+  Mountain,
+  Droplet,
+  Brush,
+  Construction,
+  Wrench,
+  ShieldCheck,
+  Home,
+  Warehouse,
+  Layers,
+  SprayCan,
+  HardHat,
+  Waves,
+  PaintRoller,
+  Ruler,
+} from "lucide-react";
 
 const services = [
   { icon: Building2, title: "Pintura de Fachadas", desc: "Renovación completa de exteriores para edificios comerciales y residenciales." },
@@ -12,6 +29,14 @@ const services = [
   { icon: Wrench, title: "Restauración", desc: "Recuperación de superficies deterioradas antes de la aplicación de pintura." },
   { icon: ShieldCheck, title: "Seguridad Total", desc: "Uso estricto de arneses y EPP para garantizar cero accidentes." },
   { icon: Paintbrush2, title: "Acabados Premium", desc: "Materiales de alta durabilidad resistentes al clima de Guayaquil." },
+  { icon: Home, title: "Pintura Residencial", desc: "Interiores y exteriores de viviendas con acabados personalizados a su gusto." },
+  { icon: Warehouse, title: "Pintura de Edificios", desc: "Proyectos de gran escala en condominios, torres y edificios de varios pisos." },
+  { icon: Layers, title: "Impermeabilización de Losas", desc: "Aplicación de membranas y mantos asfálticos para eliminar filtraciones de agua." },
+  { icon: SprayCan, title: "Pintura Comercial", desc: "Locales, centros comerciales y espacios de alto tránsito sin interrumpir su operación." },
+  { icon: HardHat, title: "Andamiaje y Rappel", desc: "Montaje de andamios y técnicas de rappel para zonas de difícil acceso." },
+  { icon: Waves, title: "Tratamiento de Humedad", desc: "Diagnóstico y solución de filtraciones antes de repintar cualquier superficie." },
+  { icon: PaintRoller, title: "Empastado y Lijado", desc: "Preparación profunda de superficies para un acabado uniforme y duradero." },
+  { icon: Ruler, title: "Asesoría y Presupuesto", desc: "Visita técnica, medición del área y cotización sin compromiso." },
 ];
 
 export function Services() {
