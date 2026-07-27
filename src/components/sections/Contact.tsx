@@ -42,14 +42,14 @@ export function Contact() {
           <div className="lg:col-span-1 bg-secondary p-10 text-white flex flex-col justify-between">
             <div>
               <h4 className="text-2xl font-bold mb-6 font-heading">Información de Contacto</h4>
-              <p className="text-slate-300 mb-10">Ponte en contacto directo o visítanos en nuestra oficina en Guayaquil.</p>
+              <p className="text-slate-300 mb-10">Ponte en contacto directo.</p>
               
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <Phone className="text-primary mt-1" size={24} />
                   <div>
-                    <p className="font-bold">Teléfono / WhatsApp</p>
-                    <p className="text-slate-300">+593 99 999 9999</p>
+                    <p className="font-bold">WhatsApp</p>
+                    <p className="text-slate-300">0963275624</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
