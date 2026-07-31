@@ -62,18 +62,18 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={20} className="text-primary shrink-0" />
-                <span>+593 99 999 9999</span>
+                <span>+593 96 327 5624</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={20} className="text-primary shrink-0" />
-                <span>contacto@tupintorluis.com</span>
+                <span>gerente@tu-pintor.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-          <p>&copy; {new Date().getFullYear()} TUPINTOR LUIS. Todos los derechos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} TU-PINTORLUIS. Todos los derechos reservados.</p>
           <div className="flex space-x-4">
             <Link href="/admin" className="hover:text-white transition-colors">Panel Admin</Link>
           </div>
