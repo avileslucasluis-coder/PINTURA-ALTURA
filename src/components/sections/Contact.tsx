@@ -8,15 +8,26 @@ export function Contact() {
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
   const [status, setStatus] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
     setStatus("sending");
-    setTimeout(() => {
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) throw new Error("Error al enviar");
+
       setStatus("success");
       setFormData({ name: "", phone: "", email: "", message: "" });
       setTimeout(() => setStatus(""), 3000);
-    }, 1500);
+    } catch (error) {
+      setStatus("error");
+      setTimeout(() => setStatus(""), 3000);
+    }
   };
 
   return (
@@ -145,6 +156,12 @@ export function Contact() {
               {status === "success" && (
                 <p className="text-green-600 font-medium text-center mt-4 bg-green-50 p-3 rounded-lg">
                   ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.
+                </p>
+              )}
+
+              {status === "error" && (
+                <p className="text-red-600 font-medium text-center mt-4 bg-red-50 p-3 rounded-lg">
+                  Hubo un error al enviar tu mensaje. Intenta de nuevo o contáctanos por WhatsApp.
                 </p>
               )}
             </form>
