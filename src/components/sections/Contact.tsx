@@ -2,11 +2,17 @@
 
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
   const [status, setStatus] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot
+  const [formLoadedAt, setFormLoadedAt] = useState<number | null>(null);
+
+  useEffect(() => {
+    setFormLoadedAt(Date.now());
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +22,7 @@ export function Contact() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, website, formLoadedAt }),
       });
 
       if (!res.ok) throw new Error("Error al enviar");
@@ -97,12 +103,24 @@ export function Contact() {
             <h4 className="text-2xl font-bold text-secondary mb-8 font-heading">Envíanos un Mensaje</h4>
             
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot: campo invisible para bots, los humanos no lo ven ni lo llenan */}
+              <input
+                type="text"
+                name="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                style={{ position: "absolute", left: "-9999px" }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Nombre Completo</label>
                   <input 
                     type="text" 
                     required
+                    maxLength={100}
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
@@ -114,6 +132,7 @@ export function Contact() {
                   <input 
                     type="tel" 
                     required
+                    maxLength={20}
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
@@ -126,6 +145,7 @@ export function Contact() {
                 <label className="block text-sm font-medium text-slate-700 mb-2">Correo Electrónico (Opcional)</label>
                 <input 
                   type="email" 
+                  maxLength={100}
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
@@ -137,6 +157,7 @@ export function Contact() {
                 <label className="block text-sm font-medium text-slate-700 mb-2">Mensaje / Requerimiento</label>
                 <textarea 
                   required
+                  maxLength={2000}
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
@@ -144,6 +165,10 @@ export function Contact() {
                   placeholder="Describe el trabajo que necesitas cotizar..."
                 />
               </div>
+
+              <p className="text-xs text-slate-500">
+                Al enviar este formulario, aceptas que usemos tus datos únicamente para responder tu solicitud.
+              </p>
 
               <button 
                 type="submit" 
