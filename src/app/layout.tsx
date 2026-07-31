@@ -13,9 +13,18 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tu-pintor.com"),
   title: "TUPINTOR LUIS | Especialistas en Pintura en Altura y Fachadas",
   description: "Servicio profesional de pintura en altura, mantenimiento de fachadas, limpieza exterior y trabajos verticales en Guayaquil.",
   keywords: "pintura en altura, pintor guayaquil, mantenimiento de fachadas, trabajos verticales, impermeabilización",
+  openGraph: {
+    title: "TUPINTOR LUIS | Especialistas en Pintura en Altura y Fachadas",
+    description: "Servicio profesional de pintura en altura, mantenimiento de fachadas, limpieza exterior y trabajos verticales en Guayaquil.",
+    url: "https://tu-pintor.com",
+    siteName: "TUPINTOR LUIS",
+    locale: "es_EC",
+    type: "website",
+  },
 };
 
 import { Providers } from "@/components/Providers";
@@ -36,4 +45,3 @@ export default function RootLayout({
     </html>
   );
 }
-
