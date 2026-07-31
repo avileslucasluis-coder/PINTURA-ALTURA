@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export function Contact() {
@@ -9,6 +10,7 @@ export function Contact() {
   const [status, setStatus] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [formLoadedAt, setFormLoadedAt] = useState<number | null>(null);
+  const [consent, setConsent] = useState(false);
 
   useEffect(() => {
     setFormLoadedAt(Date.now());
@@ -16,6 +18,13 @@ export function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!consent) {
+      setStatus("consent-error");
+      setTimeout(() => setStatus(""), 3000);
+      return;
+    }
+
     setStatus("sending");
 
     try {
@@ -29,6 +38,7 @@ export function Contact() {
 
       setStatus("success");
       setFormData({ name: "", phone: "", email: "", message: "" });
+      setConsent(false);
       setTimeout(() => setStatus(""), 3000);
     } catch (error) {
       setStatus("error");
@@ -103,7 +113,7 @@ export function Contact() {
             <h4 className="text-2xl font-bold text-secondary mb-8 font-heading">Envíanos un Mensaje</h4>
             
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Honeypot: campo invisible para bots, los humanos no lo ven ni lo llenan */}
+              {/* Honeypot */}
               <input
                 type="text"
                 name="website"
@@ -166,9 +176,22 @@ export function Contact() {
                 />
               </div>
 
-              <p className="text-xs text-slate-500">
-                Al enviar este formulario, aceptas que usemos tus datos únicamente para responder tu solicitud.
-              </p>
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="consent"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+                />
+                <label htmlFor="consent" className="text-sm text-slate-600">
+                  He leído y acepto la{" "}
+                  <Link href="/privacidad" target="_blank" className="text-primary underline">
+                    Política de Privacidad
+                  </Link>{" "}
+                  y autorizo el uso de mis datos para responder mi solicitud.
+                </label>
+              </div>
 
               <button 
                 type="submit" 
@@ -187,6 +210,12 @@ export function Contact() {
               {status === "error" && (
                 <p className="text-red-600 font-medium text-center mt-4 bg-red-50 p-3 rounded-lg">
                   Hubo un error al enviar tu mensaje. Intenta de nuevo o contáctanos por WhatsApp.
+                </p>
+              )}
+
+              {status === "consent-error" && (
+                <p className="text-red-600 font-medium text-center mt-4 bg-red-50 p-3 rounded-lg">
+                  Debes aceptar la Política de Privacidad para enviar el formulario.
                 </p>
               )}
             </form>
