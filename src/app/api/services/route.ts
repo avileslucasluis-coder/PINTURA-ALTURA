@@ -1,24 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createService, getServices } from "@/lib/service-store";
+import { NextResponse } from "next/server";
+import { servicesData } from "@/data/services";
 
 export async function GET() {
-  return NextResponse.json(getServices());
+  return NextResponse.json(servicesData);
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const { title, description, icon, order } = body;
-
-    const service = createService({
-      title,
-      description,
-      icon: typeof icon === "string" ? icon : null,
-      order: typeof order === "number" ? order : 0
-    });
-
-    return NextResponse.json(service, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: "Error creating service" }, { status: 500 });
-  }
+// El panel de administración ya no crea servicios en runtime.
+// Para agregar/editar/eliminar un servicio, edita src/data/services.ts
+// directamente y haz git push.
+export async function POST() {
+  return NextResponse.json(
+    { error: "Los servicios se administran editando src/data/services.ts" },
+    { status: 405 }
+  );
 }
