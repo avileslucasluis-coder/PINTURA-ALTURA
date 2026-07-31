@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-// Escapa HTML para evitar inyección de código en el correo
 function escapeHtml(text: string): string {
   return text
     .replace(/&/g, "&amp;")
@@ -11,18 +10,27 @@ function escapeHtml(text: string): string {
     .replace(/'/g, "&#039;");
 }
 
+const MAX_FILES = 5;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB por archivo
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { name, phone, email, message, website, formLoadedAt } = body;
+    const formData = await req.formData();
 
-    // Honeypot: campo invisible que solo un bot llenaría
+    const name = formData.get("name")?.toString() || "";
+    const phone = formData.get("phone")?.toString() || "";
+    const email = formData.get("email")?.toString() || "";
+    const message = formData.get("message")?.toString() || "";
+    const website = formData.get("website")?.toString() || "";
+    const formLoadedAt = formData.get("formLoadedAt")?.toString() || "";
+
+    // Honeypot
     if (website) {
-      // Responde como si todo hubiera ido bien, sin enviar nada (despista al bot)
       return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    // Anti-bot por tiempo: si el formulario se envía en menos de 3 segundos, es sospechoso
+    // Anti-bot por tiempo
     if (formLoadedAt) {
       const elapsed = Date.now() - Number(formLoadedAt);
       if (elapsed < 3000) {
@@ -30,24 +38,47 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Validación de campos requeridos
     if (!name || !phone || !message) {
       return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 });
     }
 
-    // Límites de longitud
     if (name.length > 100 || phone.length > 20 || message.length > 2000 || (email && email.length > 100)) {
       return NextResponse.json({ error: "Uno o más campos exceden el largo permitido" }, { status: 400 });
     }
 
-    // Validación básica de formato de teléfono (solo números, espacios, +, -)
     if (!/^[0-9+\-\s()]+$/.test(phone)) {
       return NextResponse.json({ error: "Formato de teléfono inválido" }, { status: 400 });
     }
 
-    // Validación básica de email si viene
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "Formato de correo inválido" }, { status: 400 });
+    }
+
+    // Procesar archivos adjuntos
+    const files = formData.getAll("photos") as File[];
+
+    if (files.length > MAX_FILES) {
+      return NextResponse.json({ error: `Máximo ${MAX_FILES} fotos permitidas` }, { status: 400 });
+    }
+
+    const attachments = [];
+    for (const file of files) {
+      if (!(file instanceof File) || file.size === 0) continue;
+
+      if (file.size > MAX_FILE_SIZE) {
+        return NextResponse.json({ error: `Cada foto debe pesar menos de 5MB` }, { status: 400 });
+      }
+
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        return NextResponse.json({ error: "Solo se permiten imágenes (JPG, PNG, WEBP)" }, { status: 400 });
+      }
+
+      const buffer = Buffer.from(await file.arrayBuffer());
+      attachments.push({
+        filename: file.name,
+        content: buffer,
+        contentType: file.type,
+      });
     }
 
     const transporter = nodemailer.createTransport({
@@ -72,7 +103,9 @@ export async function POST(req: NextRequest) {
         <p><strong>Correo:</strong> ${email ? escapeHtml(email) : "No proporcionado"}</p>
         <p><strong>Mensaje:</strong></p>
         <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
+        ${attachments.length > 0 ? `<p><strong>Fotos adjuntas:</strong> ${attachments.length}</p>` : ""}
       `,
+      attachments,
     });
 
     return NextResponse.json({ success: true }, { status: 200 });

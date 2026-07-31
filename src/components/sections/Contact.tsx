@@ -1,20 +1,35 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Paperclip, X } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
+  const [photos, setPhotos] = useState<File[]>([]);
   const [status, setStatus] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [formLoadedAt, setFormLoadedAt] = useState<number | null>(null);
   const [consent, setConsent] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const MAX_FILES = 5;
 
   useEffect(() => {
     setFormLoadedAt(Date.now());
   }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(e.target.files || []);
+    const combined = [...photos, ...selected].slice(0, MAX_FILES);
+    setPhotos(combined);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,16 +43,25 @@ export function Contact() {
     setStatus("sending");
 
     try {
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("phone", formData.phone);
+      data.append("email", formData.email);
+      data.append("message", formData.message);
+      data.append("website", website);
+      data.append("formLoadedAt", String(formLoadedAt));
+      photos.forEach((file) => data.append("photos", file));
+
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, website, formLoadedAt }),
+        body: data,
       });
 
       if (!res.ok) throw new Error("Error al enviar");
 
       setStatus("success");
       setFormData({ name: "", phone: "", email: "", message: "" });
+      setPhotos([]);
       setConsent(false);
       setTimeout(() => setStatus(""), 3000);
     } catch (error) {
@@ -174,6 +198,49 @@ export function Contact() {
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all resize-none"
                   placeholder="Describe el trabajo que necesitas cotizar..."
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Fotos del trabajo (opcional, máx. {MAX_FILES})
+                </label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileChange}
+                  disabled={photos.length >= MAX_FILES}
+                  className="hidden"
+                  id="photo-upload"
+                />
+                <label
+                  htmlFor="photo-upload"
+                  className={`flex items-center gap-2 w-full px-4 py-3 rounded-xl border border-dashed border-slate-300 text-slate-500 cursor-pointer hover:border-primary hover:text-primary transition-all ${photos.length >= MAX_FILES ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  <Paperclip size={18} />
+                  {photos.length >= MAX_FILES ? "Máximo alcanzado" : "Seleccionar fotos"}
+                </label>
+
+                {photos.length > 0 && (
+                  <ul className="mt-3 space-y-2">
+                    {photos.map((file, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center justify-between text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"
+                      >
+                        <span className="truncate text-slate-700">{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(index)}
+                          className="text-slate-400 hover:text-red-500 ml-2 shrink-0"
+                        >
+                          <X size={16} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <div className="flex items-start gap-3">
