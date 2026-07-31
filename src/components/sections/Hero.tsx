@@ -5,6 +5,10 @@ import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 
 export function Hero() {
+  const phoneNumber = "593963275624";
+  const message = "Hola TUPINTOR LUIS, quisiera solicitar una cotización para un trabajo en altura.";
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
   return (
     <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
       {/* Background with overlay */}
@@ -36,12 +40,14 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link 
-              href="#contact"
+            <a 
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full sm:w-auto px-8 py-4 bg-accent hover:bg-[#b23f33] text-white rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-lg shadow-accent/20 flex items-center justify-center gap-2"
             >
               Solicitar Cotización por WhatsApp
-            </Link>
+            </a>
             <Link 
               href="#portfolio"
               className="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2"
