@@ -67,7 +67,7 @@ export function Contact() {
                   <Mail className="text-primary mt-1" size={24} />
                   <div>
                     <p className="font-bold">Correo Electrónico</p>
-                    <p className="text-slate-300">contacto@tupintorluis.com</p>
+                    <p className="text-slate-300">gerente@tu-pintor.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
