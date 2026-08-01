@@ -74,9 +74,6 @@ export function Footer() {
 
         <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
           <p>&copy; {new Date().getFullYear()} TU-PINTORLUIS. Todos los derechos reservados.</p>
-          <div className="flex space-x-4">
-            <Link href="/admin" className="hover:text-white transition-colors">Panel Admin</Link>
-          </div>
         </div>
       </div>
     </footer>
