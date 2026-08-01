@@ -23,12 +23,14 @@ export function About() {
             viewport={{ once: true }}
             className="lg:w-1/2 relative"
           >
-            <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl bg-secondary">
               <Image 
                 src="/logo.png"
                 alt="Pintor en altura trabajando"
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent" />
             </div>
