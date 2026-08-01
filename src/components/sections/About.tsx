@@ -21,7 +21,7 @@ export function About() {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="lg:w-1/2 relative"
+            className="w-full lg:w-1/2 relative"
           >
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl bg-secondary">
               <Image 
