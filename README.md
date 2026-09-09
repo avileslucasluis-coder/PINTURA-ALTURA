@@ -85,7 +85,17 @@ ADMIN_USER="admin"
 ADMIN_PASSWORD="tu_contraseña_segura"
 NEXTAUTH_SECRET="una-clave-larga-y-aleatoria"
 NEXTAUTH_URL="http://localhost:3000"
+SMTP_HOST="mail.tu-dominio.com"
+SMTP_PORT="465"
+SMTP_USER="correo@tu-dominio.com"
+SMTP_PASSWORD="contraseña-real-del-buzón"
+NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
+NEXT_PUBLIC_GOOGLE_ADS_ID="AW-XXXXXXXXXX"
+NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID="AW-XXXXXXXXXX"
+NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL="xxxxxxxxxxxxxxxx"
 ```
+
+Las variables de Google son opcionales. Crea la propiedad en Google Analytics 4 y la conversión en Google Ads para obtener sus IDs; nunca pongas credenciales privadas en variables `NEXT_PUBLIC_`.
 
 > 📌 No se necesita base de datos: los proyectos y servicios se gestionan desde el código y el login del panel se valida con estas variables.
 

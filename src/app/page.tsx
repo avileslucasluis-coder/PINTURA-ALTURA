@@ -12,10 +12,11 @@ import { Portfolio } from "@/components/sections/Portfolio";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { projectsData } from "@/data/projects";
+import { rotateProjects } from "@/lib/project-rotation";
 
 export default function Home() {
   // Solo mostramos proyectos visibles y hasta un máximo de 6 en el inicio
-  const visibleProjects = projectsData.filter(p => p.visible).slice(0, 6);
+  const visibleProjects = rotateProjects(projectsData.filter(p => p.visible)).slice(0, 6);
 
   return (
     <>

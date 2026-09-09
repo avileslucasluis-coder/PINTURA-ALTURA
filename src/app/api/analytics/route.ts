@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 
 type PageView = {
   id: string;
@@ -13,9 +14,15 @@ const pageViews: PageView[] = [];
 // Public endpoint to record a page view
 export async function POST(req: Request) {
   try {
+    if (isRateLimited(`analytics:${getClientIp(req)}`, 60, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const { path } = await req.json();
 
-    const targetPath = path && typeof path === "string" ? path : "/";
+    const targetPath = path && typeof path === "string" && path.startsWith("/") && !path.startsWith("//")
+      ? path.slice(0, 200)
+      : "/";
     const view: PageView = {
       id: `view-${Date.now()}`,
       path: targetPath,
@@ -23,6 +30,7 @@ export async function POST(req: Request) {
     };
 
     pageViews.push(view);
+    if (pageViews.length > 10000) pageViews.splice(0, pageViews.length - 10000);
 
     return NextResponse.json({ success: true, id: view.id });
   } catch (error) {

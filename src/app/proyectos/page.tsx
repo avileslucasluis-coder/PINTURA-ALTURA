@@ -9,6 +9,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ArrowLeft, MapPin, Calendar, ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import Image from "next/image";
 import { projectsData, ProjectData } from "@/data/projects";
+import { rotateProjects } from "@/lib/project-rotation";
 
 type MediaItem = { type: "image" | "video"; src: string };
 
@@ -98,7 +99,7 @@ export default function ProyectosPage() {
   const [lightbox, setLightbox] = useState<{ media: MediaItem[]; index: number } | null>(null);
 
   // Filtramos por visibilidad y luego por categoría
-  const projects = projectsData.filter(p => p.visible);
+  const projects = rotateProjects(projectsData.filter(p => p.visible));
   
   const categories = ["Todos", ...Array.from(new Set(projects.map(p => p.category)))];
 

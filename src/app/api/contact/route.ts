@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 
 function escapeHtml(text: string): string {
   return text
@@ -16,12 +17,16 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "i
 
 export async function POST(req: NextRequest) {
   try {
+    if (isRateLimited(`contact:${getClientIp(req)}`, 5, 10 * 60 * 1000)) {
+      return NextResponse.json({ error: "Demasiados intentos. Intenta más tarde." }, { status: 429 });
+    }
+
     const formData = await req.formData();
 
-    const name = formData.get("name")?.toString() || "";
-    const phone = formData.get("phone")?.toString() || "";
-    const email = formData.get("email")?.toString() || "";
-    const message = formData.get("message")?.toString() || "";
+    const name = formData.get("name")?.toString().trim() || "";
+    const phone = formData.get("phone")?.toString().trim() || "";
+    const email = formData.get("email")?.toString().trim() || "";
+    const message = formData.get("message")?.toString().trim() || "";
     const website = formData.get("website")?.toString() || "";
     const formLoadedAt = formData.get("formLoadedAt")?.toString() || "";
 
@@ -32,8 +37,9 @@ export async function POST(req: NextRequest) {
 
     // Anti-bot por tiempo
     if (formLoadedAt) {
-      const elapsed = Date.now() - Number(formLoadedAt);
-      if (elapsed < 3000) {
+      const loadedAt = Number(formLoadedAt);
+      const elapsed = Date.now() - loadedAt;
+      if (!Number.isFinite(loadedAt) || elapsed < 3000 || elapsed > 24 * 60 * 60 * 1000) {
         return NextResponse.json({ error: "Envío demasiado rápido" }, { status: 400 });
       }
     }
@@ -48,6 +54,10 @@ export async function POST(req: NextRequest) {
 
     if (!/^[0-9+\-\s()]+$/.test(phone)) {
       return NextResponse.json({ error: "Formato de teléfono inválido" }, { status: 400 });
+    }
+
+    if (!/^[\p{L} .'-]+$/u.test(name)) {
+      return NextResponse.json({ error: "Formato de nombre inválido" }, { status: 400 });
     }
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -69,7 +79,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: `Cada foto debe pesar menos de 5MB` }, { status: 400 });
       }
 
-      if (!ALLOWED_TYPES.includes(file.type)) {
+      if (!ALLOWED_TYPES.includes(file.type) || !/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type)) {
         return NextResponse.json({ error: "Solo se permiten imágenes (JPG, PNG, WEBP)" }, { status: 400 });
       }
 
@@ -83,8 +93,14 @@ export async function POST(req: NextRequest) {
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: 587,
-      secure: false,
+      port: Number(process.env.SMTP_PORT || 587),
+      secure: process.env.SMTP_PORT === "465",
+      requireTLS: process.env.SMTP_PORT !== "465",
+      disableFileAccess: true,
+      disableUrlAccess: true,
+      tls: {
+        rejectUnauthorized: true,
+      },
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -111,6 +127,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error sending email:", error);
+    if (error && typeof error === "object" && "code" in error && error.code === "EAUTH") {
+      return NextResponse.json(
+        { error: "El servicio de correo no está configurado correctamente. Contacta al administrador." },
+        { status: 503 }
+      );
+    }
     return NextResponse.json({ error: "Error al enviar el mensaje" }, { status: 500 });
   }
 }

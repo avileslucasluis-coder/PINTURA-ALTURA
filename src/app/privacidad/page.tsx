@@ -84,7 +84,17 @@ export default function PoliticaPrivacidad() {
         </section>
 
         <section>
-          <h2 className="text-xl font-bold text-secondary mt-8 mb-3">8. Cambios a esta política</h2>
+          <h2 className="text-xl font-bold text-secondary mt-8 mb-3">8. Cookies y analítica</h2>
+          <p>
+            Con tu consentimiento podemos usar Google Analytics y Google Ads para medir visitas,
+            mejorar el sitio y conocer el rendimiento de nuestras campañas. Puedes rechazar estas
+            tecnologías desde el aviso de cookies. El funcionamiento esencial del sitio y el
+            formulario de contacto no depende de aceptarlas.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-bold text-secondary mt-8 mb-3">9. Cambios a esta política</h2>
           <p>
             Podemos actualizar esta política de privacidad ocasionalmente. Cualquier cambio será
             publicado en esta misma página.

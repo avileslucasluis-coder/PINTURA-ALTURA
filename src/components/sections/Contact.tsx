@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Clock, Paperclip, X } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { trackContactConversion } from "@/lib/analytics";
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
@@ -22,7 +23,11 @@ export function Contact() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []);
-    const combined = [...photos, ...selected].slice(0, MAX_FILES);
+    const validFiles = selected.filter((file) =>
+      ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"].includes(file.type) &&
+      file.size <= 5 * 1024 * 1024
+    );
+    const combined = [...photos, ...validFiles].slice(0, MAX_FILES);
     setPhotos(combined);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -34,6 +39,28 @@ export function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const name = formData.name.trim();
+    const phone = formData.phone.trim();
+    const email = formData.email.trim();
+    const message = formData.message.trim();
+
+    if (!name || name.length > 100 || !/^[\p{L} .'-]+$/u.test(name)) {
+      setStatus("validation-error");
+      return;
+    }
+    if (!/^[0-9+\-\s()]{7,20}$/.test(phone)) {
+      setStatus("validation-error");
+      return;
+    }
+    if (email && (email.length > 100 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+      setStatus("validation-error");
+      return;
+    }
+    if (!message || message.length > 2000) {
+      setStatus("validation-error");
+      return;
+    }
+
     if (!consent) {
       setStatus("consent-error");
       setTimeout(() => setStatus(""), 3000);
@@ -44,10 +71,10 @@ export function Contact() {
 
     try {
       const data = new FormData();
-      data.append("name", formData.name);
-      data.append("phone", formData.phone);
-      data.append("email", formData.email);
-      data.append("message", formData.message);
+      data.append("name", name);
+      data.append("phone", phone);
+      data.append("email", email);
+      data.append("message", message);
       data.append("website", website);
       data.append("formLoadedAt", String(formLoadedAt));
       photos.forEach((file) => data.append("photos", file));
@@ -57,15 +84,19 @@ export function Contact() {
         body: data,
       });
 
-      if (!res.ok) throw new Error("Error al enviar");
+      if (!res.ok) {
+        const result = await res.json().catch(() => null);
+        throw new Error(result?.error || "Error al enviar");
+      }
 
       setStatus("success");
+      trackContactConversion();
       setFormData({ name: "", phone: "", email: "", message: "" });
       setPhotos([]);
       setConsent(false);
       setTimeout(() => setStatus(""), 3000);
     } catch (error) {
-      setStatus("error");
+      setStatus(error instanceof Error && error.message.includes("correo") ? "mail-error" : "error");
       setTimeout(() => setStatus(""), 3000);
     }
   };
@@ -155,6 +186,8 @@ export function Contact() {
                     type="text" 
                     required
                     maxLength={100}
+                    autoComplete="name"
+                    aria-invalid={status === "validation-error"}
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
@@ -167,6 +200,9 @@ export function Contact() {
                     type="tel" 
                     required
                     maxLength={20}
+                    autoComplete="tel"
+                    inputMode="tel"
+                    aria-invalid={status === "validation-error"}
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
@@ -180,6 +216,8 @@ export function Contact() {
                 <input 
                   type="email" 
                   maxLength={100}
+                  autoComplete="email"
+                  aria-invalid={status === "validation-error"}
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
@@ -192,6 +230,7 @@ export function Contact() {
                 <textarea 
                   required
                   maxLength={2000}
+                  aria-invalid={status === "validation-error"}
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
@@ -280,9 +319,21 @@ export function Contact() {
                 </p>
               )}
 
+              {status === "mail-error" && (
+                <p role="alert" className="text-red-600 font-medium text-center mt-4 bg-red-50 p-3 rounded-lg">
+                  El correo del sitio no está disponible en este momento. Escríbenos por WhatsApp.
+                </p>
+              )}
+
               {status === "consent-error" && (
                 <p className="text-red-600 font-medium text-center mt-4 bg-red-50 p-3 rounded-lg">
                   Debes aceptar la Política de Privacidad para enviar el formulario.
+                </p>
+              )}
+
+              {status === "validation-error" && (
+                <p role="alert" className="text-red-600 font-medium text-center mt-4 bg-red-50 p-3 rounded-lg">
+                  Revisa los campos: usa un nombre válido, teléfono, correo y mensaje dentro de los límites.
                 </p>
               )}
             </form>
